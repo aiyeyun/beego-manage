@@ -1,0 +1,91 @@
+{{define "css"}}
+{{end}}
+
+{{template "layout/head.html" . }}
+
+<div class="container-fluid">
+    <div class="card">
+        <form id="RangeValidation" class="form-horizontal" action="" method="" novalidate="novalidate">
+            <div class="card-header card-header-text" data-background-color="rose">
+                <h4 class="card-title">添加菜单栏</h4>
+            </div>
+            <div class="card-content">
+                <div class="row">
+                    <label class="col-sm-2 label-on-left">Min Length</label>
+                    <div class="col-sm-7">
+                        <div class="form-group label-floating is-empty">
+                            <label class="control-label"></label>
+                            <input class="form-control" type="text" name="min_length" minlength="5">
+                            <span class="material-input"></span></div>
+                    </div>
+                    <label class="col-sm-3 label-on-right">
+                        <code>minLength="5"</code>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-sm-2 label-on-left">Max Length</label>
+                    <div class="col-sm-7">
+                        <div class="form-group label-floating is-empty">
+                            <label class="control-label"></label>
+                            <input class="form-control" type="text" name="max_length" maxlength="5">
+                            <span class="material-input"></span></div>
+                    </div>
+                    <label class="col-sm-3 label-on-right">
+                        <code>maxLength="5"</code>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-sm-2 label-on-left">Range</label>
+                    <div class="col-sm-7">
+                        <div class="form-group label-floating is-empty">
+                            <label class="control-label"></label>
+                            <input class="form-control" type="text" name="range" range="[6,10]">
+                            <span class="material-input"></span></div>
+                    </div>
+                    <label class="col-sm-3 label-on-right">
+                        <code>range="[6,10]"</code>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-sm-2 label-on-left">Min Value</label>
+                    <div class="col-sm-7">
+                        <div class="form-group label-floating is-empty">
+                            <label class="control-label"></label>
+                            <input class="form-control" type="text" name="min" min="6">
+                            <span class="material-input"></span></div>
+                    </div>
+                    <label class="col-sm-3 label-on-right">
+                        <code>min="6"</code>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-sm-2 label-on-left">Max Value</label>
+                    <div class="col-sm-7">
+                        <div class="form-group label-floating is-empty">
+                            <label class="control-label"></label>
+                            <input class="form-control" type="text" name="max" max="6">
+                            <span class="material-input"></span></div>
+                    </div>
+                    <label class="col-sm-3 label-on-right">
+                        <code>max="6"</code>
+                    </label>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-rose btn-fill">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{template "layout/tail.html" . }}
+
+{{define "js"}}
+<script>
+    $(function () {
+        alert('1111')
+    })
+</script>
+{{end}}
+
+{{template "js" .}}
