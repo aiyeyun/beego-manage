@@ -37,4 +37,5 @@ func init()  {
 
 	//注册 Model
 	orm.RegisterModelWithPrefix(db_prefix, new(models.Admin))
+	orm.RegisterModelWithPrefix(db_prefix, new(models.Menu))
 }

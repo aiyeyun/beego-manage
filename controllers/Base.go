@@ -5,6 +5,7 @@ import (
 	"manage/models"
 	"html/template"
 	"strings"
+	"strconv"
 )
 
 // BaseController 基 controller
@@ -19,7 +20,6 @@ var (
 	AdminModel models.Admin
 )
 
-
 //构造函数
 func (c *BaseController) Prepare() {
 	//路由验证
@@ -32,7 +32,6 @@ func (c *BaseController) Prepare() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["xsrf_token"] = c.XSRFToken()
 	c.Data["copyright"] = Copyright
-	c.Data["wocao"] = "握草"
 }
 
 //路由验证
@@ -84,4 +83,30 @@ func (c *BaseController) IsGuest() bool {
 		return false
 	}
 	return true
+}
+
+//设置错误 flash 消息
+func (c *BaseController) SetErrorFlash(message string)  {
+	beego.NewFlash()
+	flash := beego.NewFlash()
+	flash.Error(message)
+	flash.Store(&c.Controller)
+}
+
+//设置成功 flash 消息
+func (c *BaseController) SetSuccessFlash(message string) {
+	beego.NewFlash()
+	flash := beego.NewFlash()
+	flash.Success(message)
+	flash.Store(&c.Controller)
+}
+
+//获取 GET 参数 正则路由 与普通路由的参数
+func (c *BaseController) GetParamInt(key string) (int, error) {
+	val := c.Ctx.Input.Param(":"+key)
+	if val != "" {
+		val, err := strconv.Atoi(val)
+		return val, err
+	}
+	return c.GetInt(key)
 }

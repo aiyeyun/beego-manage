@@ -14,7 +14,7 @@ type LoginContrller struct {
 
 //视图
 func (c *LoginContrller) Get()  {
-	c.TplName = "login/index.tpl"
+	c.TplName = "login/index.html"
 }
 
 //登录
@@ -64,7 +64,7 @@ func (c *LoginContrller) Lock()  {
 	}
 	//登录用户 锁定
 	c.SetSession("user-lock", true)
-	c.TplName = "login/lock.tpl"
+	c.TplName = "login/lock.html"
 }
 
 //解锁屏幕

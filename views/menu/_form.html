@@ -5,74 +5,73 @@
 
 <div class="container-fluid">
     <div class="card">
-        <form id="RangeValidation" class="form-horizontal" action="" method="" novalidate="novalidate">
+        <form id="MenuValidation" action="" method="POST">
+            {{.xsrfdata}}
             <div class="card-header card-header-text" data-background-color="rose">
-                <h4 class="card-title">添加菜单栏</h4>
+                <h4 class="card-title">{{if .model.Id}}编辑菜单栏{{else}}添加菜单栏{{end}}</h4>
             </div>
+
             <div class="card-content">
-                <div class="row">
-                    <label class="col-sm-2 label-on-left">Min Length</label>
-                    <div class="col-sm-7">
-                        <div class="form-group label-floating is-empty">
-                            <label class="control-label"></label>
-                            <input class="form-control" type="text" name="min_length" minlength="5">
-                            <span class="material-input"></span></div>
-                    </div>
-                    <label class="col-sm-3 label-on-right">
-                        <code>minLength="5"</code>
+
+                <div class="form-group label-floating">
+                    <label class="control-label">
+                        请选择父节点
+                        <small>*</small>
                     </label>
+                    <select id="pid" class="form-control" name="pid" required="true">
+                        {{range .parentNode}}
+                        <option value="{{.Id}}">{{.Name}}</option>
+                        {{end}}
+                        <option value="1">1111</option>
+                    </select>
                 </div>
-                <div class="row">
-                    <label class="col-sm-2 label-on-left">Max Length</label>
-                    <div class="col-sm-7">
-                        <div class="form-group label-floating is-empty">
-                            <label class="control-label"></label>
-                            <input class="form-control" type="text" name="max_length" maxlength="5">
-                            <span class="material-input"></span></div>
-                    </div>
-                    <label class="col-sm-3 label-on-right">
-                        <code>maxLength="5"</code>
+
+                <div class="form-group label-floating">
+                    <label class="control-label">
+                        栏目名
+                        <small>*</small>
                     </label>
+                    <input class="form-control" name="name" type="text" required="true" value="{{.model.Name}}" />
                 </div>
-                <div class="row">
-                    <label class="col-sm-2 label-on-left">Range</label>
-                    <div class="col-sm-7">
-                        <div class="form-group label-floating is-empty">
-                            <label class="control-label"></label>
-                            <input class="form-control" type="text" name="range" range="[6,10]">
-                            <span class="material-input"></span></div>
-                    </div>
-                    <label class="col-sm-3 label-on-right">
-                        <code>range="[6,10]"</code>
+
+                <div class="form-group label-floating box-icons hide">
+                    <label class="control-label">
+                        Icons
                     </label>
+                    <input class="form-control" name="icons" type="text" value="{{.model.Icons}}" />
                 </div>
-                <div class="row">
-                    <label class="col-sm-2 label-on-left">Min Value</label>
-                    <div class="col-sm-7">
-                        <div class="form-group label-floating is-empty">
-                            <label class="control-label"></label>
-                            <input class="form-control" type="text" name="min" min="6">
-                            <span class="material-input"></span></div>
-                    </div>
-                    <label class="col-sm-3 label-on-right">
-                        <code>min="6"</code>
+
+                <div class="form-group label-floating box-url hide">
+                    <label class="control-label">
+                        Url
+                        <small>*</small>
                     </label>
+                    <input class="form-control" id="url" name="url" type="text" value="{{.model.Url}}" />
                 </div>
-                <div class="row">
-                    <label class="col-sm-2 label-on-left">Max Value</label>
-                    <div class="col-sm-7">
-                        <div class="form-group label-floating is-empty">
-                            <label class="control-label"></label>
-                            <input class="form-control" type="text" name="max" max="6">
-                            <span class="material-input"></span></div>
-                    </div>
-                    <label class="col-sm-3 label-on-right">
-                        <code>max="6"</code>
+
+                <div class="form-group label-floating">
+                    <label class="control-label">
+                        排序
+                        <small>*</small>
                     </label>
+                    <input class="form-control" name="sort" type="text" required="true" value="{{if .model.Sort}}{{.model.Sort}}{{end}}" />
                 </div>
-            </div>
-            <div class="card-footer text-center">
-                <button type="submit" class="btn btn-rose btn-fill">提交</button>
+
+                <div class="form-group label-floating">
+                    <label class="control-label">
+                        状态
+                        <small>*</small>
+                    </label>
+                    <select id="status" class="form-control" name="status" required="true">
+                        {{range .status}}
+                        <option value="{{.Status}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <div class="form-footer text-right">
+                    <button type="submit" class="btn btn-rose btn-fill">提交</button>
+                </div>
             </div>
         </form>
     </div>
@@ -81,10 +80,58 @@
 {{template "layout/tail.html" . }}
 
 {{define "js"}}
-<script>
-    $(function () {
-        alert('1111')
-    })
+<script type="text/javascript">
+
+    function setFormValidation(id) {
+        $(id).validate({
+            errorPlacement: function(error, element) {
+                $(element).parent('div').addClass('has-error');
+            }
+        });
+    }
+
+    //父节点显示
+    function parentNodeShow() {
+        var pid= $("#pid").val();
+        if(pid == 0){
+            $(".box-icons").removeClass('hide')
+            $(".box-url").addClass('hide')
+            $("#url").removeAttr('required')
+            $("#url").removeAttr('aria-required')
+            return
+        }
+        $(".box-icons").addClass('hide')
+        $(".box-url").removeClass('hide')
+        $("#url").attr('required', 'true')
+    }
+
+    //设置 父节点默认值
+    function setParentNodeShowDefault() {
+        if({{.model.Pid}}){
+            $("#pid").find('option[value={{.model.Pid}}]').attr('selected', 'selected')
+        }
+    }
+
+    //设置 状态默认值
+    function setStatusDefault() {
+        if({{.model.Status}}){
+            $("#status").find('option[value={{.model.Status}}]').attr('selected', 'selected')
+        }
+    }
+    
+    $(document).ready(function() {
+        setParentNodeShowDefault()
+        setStatusDefault()
+        setFormValidation('#MenuValidation');
+
+        parentNodeShow()
+
+        $("#pid").change(function () {
+            parentNodeShow()
+        })
+
+    });
+
 </script>
 {{end}}
 

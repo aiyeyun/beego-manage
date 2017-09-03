@@ -5,5 +5,5 @@ type ConsoleController struct {
 }
 
 func (c *ConsoleController) Get()  {
-	c.Display("index.tpl")
+	c.Display("index")
 }

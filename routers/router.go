@@ -29,8 +29,7 @@ func init() {
 	//菜单栏管理
 	beego.Router("/menu", &controllers.MenuController{})
 	//添加 编辑 菜单栏 Form 表单 视图页面
-	beego.Router("/menu/form", &controllers.MenuController{}, "get:Form")
-
+	beego.Router("/menu/form/?:id([0-9]+)", &controllers.MenuController{}, "get:Form;post:Form")
 
 
 	//Errors 错误渲染
