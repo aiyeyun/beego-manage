@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"manage/models"
 	"html/template"
 	"strings"
 	"strconv"
@@ -16,8 +15,6 @@ type BaseController struct {
 var (
 	//版权信息
 	Copyright = `Cloud 夜版权所有 蜀 ICP 证 15034906 号`
-	//管理员 表
-	AdminModel models.Admin
 )
 
 //构造函数

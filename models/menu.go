@@ -8,10 +8,8 @@ import (
 	"errors"
 )
 
-//菜单列表
-type MenuList []*Menu
-
 type Menu struct {
+	BaseModel
 	Id      int     `form:"id"`      //主键ID
 	Pid     int     `form:"pid"`     //父节点ID
 	Url     string  `form:"url"`     //Url
@@ -21,6 +19,14 @@ type Menu struct {
 	Sort    int     `form:"sort"`    //菜单排序
 	Created int64                    //创建时间
 	Update  int64                    //更新时间
+}
+
+//菜单列表
+type MenuList []*Menu
+
+//表名
+func (model *Menu) TableName() string {
+	return "menu"
 }
 
 //数据验证

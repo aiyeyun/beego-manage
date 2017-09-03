@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"manage/form"
 	"crypto/md5"
 	"encoding/hex"
 	"manage/models"
@@ -19,31 +18,25 @@ func (c *LoginContrller) Get()  {
 
 //登录
 func (c *LoginContrller) Post()  {
-	loginForm := new(form.LoginForm)
-	c.ParseForm(loginForm)
-	err := loginForm.Verification()
+	model := new(models.Admin)
+	c.ParseForm(model)
+	model.Last_ip = c.Ctx.Input.IP()
+	err := model.Validate()
 	if err != nil {
-		flash := beego.NewFlash()
-		flash.Error(err.Error())
-		flash.Store(&c.Controller)
+		c.SetErrorFlash(err.Error())
 		c.Redirect("/", 302)
 	}
 
-	//登录
-	adminUser, err := AdminModel.Login(loginForm.Username, loginForm.Password, c.Ctx.Input.IP())
+	//登录验证
+	err = model.Login()
 	if err != nil {
-		flash := beego.NewFlash()
-		flash.Error(err.Error())
-		flash.Store(&c.Controller)
+		c.SetErrorFlash(err.Error())
 		c.Redirect("/", 302)
-
-		//此处要 return 不然 会继续往下执行
 		return
 	}
 
 	//登录成功 Set Session
-	c.SetSession("user", adminUser)
-
+	c.SetSession("user", model)
 	//重定向控制台
 	c.Redirect("/console", 302)
 }
