@@ -8,7 +8,7 @@
         <form id="MenuValidation" action="" method="POST">
             {{.xsrfdata}}
             <div class="card-header card-header-text" data-background-color="rose">
-                <h4 class="card-title">{{if .model.Id}}编辑菜单栏{{else}}添加菜单栏{{end}}</h4>
+                <h4 class="card-title">{{if .model.Id}}编辑栏目{{else}}添加栏目{{end}}</h4>
             </div>
 
             <div class="card-content">
@@ -19,6 +19,7 @@
                         <small>*</small>
                     </label>
                     <select id="pid" class="form-control" name="pid" required="true">
+                        <option value="0">顶级栏目</option>
                         {{range .parentNode}}
                         <option value="{{.Id}}">{{.Name}}</option>
                         {{end}}

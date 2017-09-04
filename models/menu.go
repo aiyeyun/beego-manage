@@ -6,6 +6,7 @@ import (
 	"time"
 	"github.com/astaxie/beego/validation"
 	"errors"
+	"fmt"
 )
 
 type Menu struct {
@@ -75,21 +76,13 @@ func (model *Menu) Save() (int64, error) {
 //获取所有父节点
 func (model *Menu) GetParentNode() (MenuList, error) {
 	o := orm.NewOrm()
-	menuList := make([]*Menu, 0)
+	menuList := make(MenuList, 0)
 	_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE).
 		OrderBy("-sort").Limit(-1).All(&menuList)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(menuList) > 0 {
-		tempMenu := menuList[0]
-		menuList[0] = &Menu{Id: 0, Name: "顶级菜单栏"}
-		menuList = append(menuList, tempMenu)
-		return menuList, nil
-	}
-
-	menuList = append(menuList, &Menu{Id: 0, Name: "顶级菜单栏"})
 	return menuList, nil
 }
 
@@ -97,4 +90,28 @@ func (model *Menu) GetParentNode() (MenuList, error) {
 func (model *Menu) GetModelById() error {
 	o := orm.NewOrm()
 	return o.Read(model)
+}
+
+//获取所有菜单栏目
+func (model *Menu) GetNodelAll() (MenuList, map[int]MenuList) {
+	//获取所有父节点
+	parent, _ := model.GetParentNode()
+	node := make(map[int]MenuList, 0)
+	nodeQuery := func(pid int) (MenuList, error) {
+		o := orm.NewOrm()
+		menuList := make(MenuList, 0)
+		_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).
+			Filter("pid", pid).
+			OrderBy("-sort").Limit(-1).All(&menuList)
+		if err != nil {
+			return nil, err
+		}
+		return menuList, nil
+	}
+	for i := range parent {
+		subNode, _ := nodeQuery(parent[i].Id)
+		node[parent[i].Id] = subNode
+		fmt.Println(node[parent[i].Id])
+	}
+	return parent, node
 }
