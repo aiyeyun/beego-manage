@@ -3,7 +3,6 @@ package controllers
 import (
 	"manage/utils/models/MenuModelUtil"
 	"manage/models"
-	"fmt"
 )
 
 type MenuController struct {
@@ -12,15 +11,14 @@ type MenuController struct {
 
 //列表
 func (c *MenuController) Get()  {
+	p, _ := c.GetParamInt("p")
 	model := new(models.Menu)
-	parent, subNode := model.GetNodelAll()
+
+	parent, subNode, page := model.GetNodelAll(p)
+	page.Href = "/menu"
+	c.Data["page"] = page.GetLinks()
 	c.Data["parent"] = parent
 	c.Data["subNode"] = subNode
-	mmap := make(map[string]string)
-	mmap["wang"] = "wang"
-	mmap["hai"] = "hai"
-	c.Data["mmap"] = mmap
-	fmt.Println(subNode)
 	c.Display("index")
 }
 

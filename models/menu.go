@@ -6,7 +6,7 @@ import (
 	"time"
 	"github.com/astaxie/beego/validation"
 	"errors"
-	"fmt"
+	"manage/utils/page"
 )
 
 type Menu struct {
@@ -86,6 +86,28 @@ func (model *Menu) GetParentNode() (MenuList, error) {
 	return menuList, nil
 }
 
+//分页返回
+func (model *Menu) GetParentNodePaging(p, limit int) (MenuList, *page.PageLinks, error) {
+	o := orm.NewOrm()
+	query := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE)
+	pg := &page.PageLinks{
+		Currentpage: p,
+		PageDataSize: limit,
+		Query: query,
+	}
+
+
+	menuList := make(MenuList, 0)
+	_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE).
+		OrderBy("-sort").Limit(limit).Offset(pg.GetOffset()).All(&menuList)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return menuList, pg, nil
+}
+
 //根据ID 获取model
 func (model *Menu) GetModelById() error {
 	o := orm.NewOrm()
@@ -93,9 +115,25 @@ func (model *Menu) GetModelById() error {
 }
 
 //获取所有菜单栏目
-func (model *Menu) GetNodelAll() (MenuList, map[int]MenuList) {
+func (model *Menu) GetNodelAll(p int) (MenuList, map[int]MenuList, *page.PageLinks) {
 	//获取所有父节点
-	parent, _ := model.GetParentNode()
+	var parent MenuList
+	var pg *page.PageLinks
+	//parent, _ := model.GetParentNode()
+	//parent, pg, _ = model.GetParentNodePaging(p, 1)
+
+	if p >= 0 {
+		//需要分页
+		p_num := p
+		if p_num == 0 {
+			p_num = 1
+		}
+		parent, pg, _ = model.GetParentNodePaging(p_num, 1)
+	} else {
+		//不需要分页
+		parent, _ = model.GetParentNode()
+	}
+
 	node := make(map[int]MenuList, 0)
 	nodeQuery := func(pid int) (MenuList, error) {
 		o := orm.NewOrm()
@@ -111,7 +149,12 @@ func (model *Menu) GetNodelAll() (MenuList, map[int]MenuList) {
 	for i := range parent {
 		subNode, _ := nodeQuery(parent[i].Id)
 		node[parent[i].Id] = subNode
-		fmt.Println(node[parent[i].Id])
 	}
-	return parent, node
+
+	//不需要分页 返回
+	if p < 0 {
+		return parent, node, nil
+	}
+
+	return parent, node, pg
 }
