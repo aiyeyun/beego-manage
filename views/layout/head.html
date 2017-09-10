@@ -67,10 +67,10 @@
                 </div>
             </div>
             <ul class="nav">
-                <li class="active">
-                    <a href="./dashboard.html">
+                <li class="{{ParentMenuActive .requestUrl "/console"}}">
+                    <a href="/console">
                         <i class="material-icons">dashboard</i>
-                        <p>Dashboard</p>
+                        <p>Consloe</p>
                     </a>
                 </li>
                 <li>
@@ -79,19 +79,19 @@
                         <p>Icons</p>
                     </a>
                 </li>
-                <li>
+                <li class="{{ParentMenuActive .requestUrl "/menu"}}">
                     <a data-toggle="collapse" href="#menu">
                         <i class="material-icons">menu</i>
                         <p>菜单栏
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse" id="menu">
+                    <div class="collapse {{SubMenuBoxOpen .requestUrl "/menu"}}" id="menu" style="{{SubMenuBoxOpenStyle .requestUrl "/menu"}}">
                         <ul class="nav">
-                            <li>
+                            <li class="{{SubMenuActive .requestUrl "/menu" ""}}">
                                 <a href="/menu">菜单栏列表</a>
                             </li>
-                            <li>
+                            <li class="{{SubMenuActive .requestUrl "/menu" "/form"}}">
                                 <a href="/menu/form">添加菜单栏</a>
                             </li>
                         </ul>
@@ -244,6 +244,30 @@
                         <p>Calendar</p>
                     </a>
                 </li>
+
+                {{$requestUrl := .requestUrl}}
+                {{range $parentKey, $info := index MyMenus "parent"}}
+                    {{$parentUrl := .Url}}
+                    {{$subMenus := index MyMenus "subNode" .Id}}
+                    <li class="{{ParentMenuActive $requestUrl .Url}}">
+                        <a data-toggle="collapse" href="#menu_{{$parentKey}}">
+                            <i class="material-icons">{{.Icons}}</i>
+                            <p>{{.Name}}
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse {{SubMenuBoxOpen $requestUrl $parentUrl}}" id="menu_{{$parentKey}}" style="{{SubMenuBoxOpenStyle $requestUrl $parentUrl}}">
+                            <ul class="nav">
+                                {{range $subMenus}}
+                                    <li class="{{SubMenuActive $requestUrl $parentUrl .Url}}">
+                                        <a href="{{$parentUrl}}{{.Url}}">{{.Name}}</a>
+                                    </li>
+                                {{end}}
+                            </ul>
+                        </div>
+                    </li>
+                {{end}}
+
             </ul>
         </div>
     </div>

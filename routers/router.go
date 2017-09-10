@@ -42,4 +42,16 @@ func init() {
 	//Filter 过滤器
 	//beego.InsertFilter("/*", beego.BeforeStatic, controllers.BeforeStatic)
 	//beego.InsertFilter("/*", beego.BeforeRouter, controllers.BeforeRouter)
+
+	//自定义模板函数
+	addFuncMap()
+}
+
+//自定义模板函数
+func addFuncMap()  {
+	beego.AddFuncMap("MyMenus", GetMyMenus)
+	beego.AddFuncMap("ParentMenuActive", ParentMenuActive)
+	beego.AddFuncMap("SubMenuActive", SubMenuActive)
+	beego.AddFuncMap("SubMenuBoxOpen", SubMenuBoxOpen)
+	beego.AddFuncMap("SubMenuBoxOpenStyle", SubMenuBoxOpenStyle)
 }

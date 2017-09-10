@@ -21,7 +21,7 @@ var (
 func (c *BaseController) Prepare() {
 	//路由验证
 	//c.RouteAuth()
-	
+
 	//读取 flash 消息
 	beego.ReadFromRequest(&c.Controller)
 	
@@ -29,6 +29,7 @@ func (c *BaseController) Prepare() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["xsrf_token"] = c.XSRFToken()
 	c.Data["copyright"] = Copyright
+	c.Data["requestUrl"] = c.Ctx.Request.RequestURI
 }
 
 //路由验证
