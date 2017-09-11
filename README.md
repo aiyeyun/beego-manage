@@ -1,2 +1,2 @@
 # beego-manage
-golang beego anage 
+golang beego manage 
