@@ -34,6 +34,14 @@ func init() {
 	beego.Router("/menu/form/?:id([0-9]+)", &controllers.MenuController{}, "get:Form;post:Form")
 
 
+
+	//----------------------------------  管理员  ----------------------------------
+	//管理员列表
+	beego.Router("/admin", &controllers.AdminController{})
+	//添加 编辑 管理员 Form 表单 视图页面
+	beego.Router("/admin/form/?:id([0-9]+)", &controllers.AdminController{}, "get:Form;post:Form")
+
+
 	//Errors 错误渲染
 	beego.ErrorController(&controllers.ErrrosController{})
 

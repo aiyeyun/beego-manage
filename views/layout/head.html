@@ -97,6 +97,27 @@
                         </ul>
                     </div>
                 </li>
+                <li class="{{ParentMenuActive .requestUrl "/admin"}}">
+                    <a data-toggle="collapse" href="#menu_admin">
+                        <i class="material-icons">person</i>
+                        <p>管理员
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse {{SubMenuBoxOpen .requestUrl "/admin"}}" id="menu_admin" style="{{SubMenuBoxOpenStyle .requestUrl "/admin"}}">
+                        <ul class="nav">
+                            <li class="{{SubMenuActive .requestUrl "/admin" ""}}">
+                                <a href="/admin">管理员列表</a>
+                            </li>
+                            <li class="{{SubMenuActive .requestUrl "/admin" "/form"}}">
+                                <a href="/admin/form">添加管理员</a>
+                            </li>
+                            <li class="{{SubMenuActive .requestUrl "/admin" "/form"}}">
+                                <a href="/admin/form">管理员权限</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li>
                     <a data-toggle="collapse" href="#pagesExamples">
                         <i class="material-icons">image</i>
