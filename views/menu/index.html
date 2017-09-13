@@ -39,7 +39,7 @@
                                     <a href="/menu/form/{{.Id}}" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="">
                                         <i class="material-icons">edit</i>
                                     </a>
-                                    <a type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="">
+                                    <a href="/menu/del" type="button" rel="tooltip" class="btn btn-danger del-btn" data-original-title="" title="">
                                         <i class="material-icons">close</i>
                                     </a>
                                 </td>
@@ -62,7 +62,7 @@
                                         <a href="/menu/form/{{.Id}}" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="">
                                             <i class="material-icons">edit</i>
                                         </a>
-                                        <a type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="">
+                                        <a href="http://www.baidu.com" type="button" rel="tooltip" class="btn btn-danger del-btn" data-original-title="" title="">
                                             <i class="material-icons">close</i>
                                         </a>
                                     </td>
@@ -86,6 +86,32 @@
 {{template "layout/tail.html" . }}
 
 {{define "js"}}
+<script>
+    $(document).ready(function() {
+        $(".del-btn").click(function () {
+            var href = $(this).attr('href')
+            swal({
+                title: '确定要删除吗?',
+                html: '',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then(function(result) {
+                self.location = href;
+                return true;
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                    return false;
+                }
+            })
+
+            return false;
+        })
+    });
+</script>
 {{end}}
 
 {{ template "js" }}

@@ -158,3 +158,27 @@ func (model *Menu) GetNodelAll(p int) (MenuList, map[int]MenuList, *page.PageLin
 
 	return parent, node, pg
 }
+
+//获取所有 菜单栏目
+func (model *Menu) GetNodes() (MenuList, map[int]MenuList) {
+	parent, _ := model.GetParentNode()
+	nodes := make(map[int]MenuList, 0)
+
+	nodeQuery := func(pid int) (MenuList, error) {
+		o := orm.NewOrm()
+		menuList := make(MenuList, 0)
+		_, err := o.QueryTable(model).Filter("pid", pid).
+			OrderBy("-sort").Limit(-1).All(&menuList)
+		if err != nil {
+			return nil, err
+		}
+		return menuList, nil
+	}
+
+	for i := range parent {
+		subNode, _ := nodeQuery(parent[i].Id)
+		nodes[parent[i].Id] = subNode
+	}
+
+	return parent, nodes
+}

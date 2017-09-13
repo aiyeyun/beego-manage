@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{{define "css"}}
+{{end}}
 
-</body>
-</html>
+{{template "layout/head.html" . }}
+
+
+{{template "layout/tail.html" . }}
+
+{{define "js"}}
+<script>
+    $(document).ready(function() {
+    });
+</script>
+{{end}}
+
+{{ template "js" }}

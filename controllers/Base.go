@@ -108,3 +108,10 @@ func (c *BaseController) GetParamInt(key string) (int, error) {
 	}
 	return c.GetInt(key)
 }
+
+//获取 GET 参数 正则路由 与普通路由的参数
+func (c *BaseController) GetParamUint8(key string) (uint8, error) {
+	val := c.Ctx.Input.Param(":"+key)
+	int64, err := strconv.ParseUint(val, 10, 8)
+	return uint8(int64), err
+}

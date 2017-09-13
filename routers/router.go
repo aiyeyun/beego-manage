@@ -38,8 +38,8 @@ func init() {
 	//----------------------------------  管理员  ----------------------------------
 	//管理员列表
 	beego.Router("/admin", &controllers.AdminController{})
-	//添加 编辑 管理员 Form 表单 视图页面
-	beego.Router("/admin/form/?:id([0-9]+)", &controllers.AdminController{}, "get:Form;post:Form")
+	//角色授权
+	beego.Router("/admin/auth/?:role([0-9]+)", &controllers.AdminController{}, "get:Auth;post:Auth")
 
 
 	//Errors 错误渲染

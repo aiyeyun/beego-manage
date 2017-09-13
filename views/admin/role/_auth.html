@@ -1,0 +1,68 @@
+{{define "css"}}
+{{end}}
+
+{{template "layout/head.html" . }}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="rose">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <h4 class="card-title">授权栏目表</h4>
+                <div class="card-content">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>子栏目名</th>
+                                <th>父栏目名</th>
+                                <th>Icons</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {{$authList := .authList}}
+
+                            {{range .parent}}
+                                {{$parentName := .Name}}
+                                {{$parentIcons := .Icons}}
+
+                                {{$sub_node := index $.subNode .Id}}
+                                {{range $sub_node}}
+                                    <tr>
+                                        <td style="padding-left: 15px">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="optionsCheckboxes" {{if index $authList .Id}}checked=""{{end}}>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>{{.Name}} {{index $authList 6}} </td>
+                                        <td>{{$parentName}}</td>
+                                        <td><i class="material-icons">{{$parentIcons}}</i></td>
+                                    </tr>
+                                {{end}}
+
+                            {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "layout/tail.html" . }}
+
+{{define "js"}}
+<script>
+    $(document).ready(function() {
+    });
+</script>
+{{end}}
+
+{{ template "js" }}

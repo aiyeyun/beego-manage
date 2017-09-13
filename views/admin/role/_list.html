@@ -1,0 +1,58 @@
+{{define "css"}}
+{{end}}
+
+{{template "layout/head.html" . }}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="rose">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <h4 class="card-title">管理角色列表</h4>
+                <div class="card-content">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>角色名</th>
+                                <th class="disabled-sorting text-right">管理操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {{range $key, $val := .role_list}}
+                                <tr>
+                                    <td>{{$val}}</td>
+                                    <td class="td-actions text-right">
+                                        <a href="/menu/form/" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="查看权限">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </a>
+                                        <a href="/menu/form/" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="编辑权限">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {{end}}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "layout/tail.html" . }}
+
+{{define "js"}}
+<script>
+    $(document).ready(function() {
+    });
+</script>
+{{end}}
+
+{{ template "js" }}
