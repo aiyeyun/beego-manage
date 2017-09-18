@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"manage/utils/rbac"
+	"manage/models"
 )
 
 type AdminController struct {
@@ -18,10 +19,16 @@ func (c *AdminController) Get()  {
 func (c *AdminController) Auth()  {
 	role, _ := c.GetParamUint8("role")
 
+	if c.Ctx.Input.IsPost() {
+		model := models.MenuAuth{}
+		model.BatchAuth(role, c.GetStrings("auth[]"))
+	}
+
 	parent, subNode, authList := rbac.GetRoleAuthMenus(role)
 	c.Data["parent"]   = parent
 	c.Data["subNode"]  = subNode
 	c.Data["authList"] = authList
+	c.SetSuccessFlash("批量授权成功")
 
 	c.Display("role/_auth")
 }

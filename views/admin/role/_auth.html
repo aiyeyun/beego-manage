@@ -11,12 +11,25 @@
                     <i class="material-icons">assignment</i>
                 </div>
                 <h4 class="card-title">授权栏目表</h4>
-                <div class="card-content">
+                <form method="post">
+                    {{.xsrfdata}}
+                    <div class="card-content">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>选择</th>
+                                <th style="padding-left: 15px">
+                                    <div class="row">
+                                        <div class="col-md-1" style="margin-top: 4px">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" id="all">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5" style="margin-top: 6px">全选</div>
+                                    </div>
+                                </th>
                                 <th>子栏目名</th>
                                 <th>父栏目名</th>
                                 <th>Icons</th>
@@ -36,21 +49,29 @@
                                         <td style="padding-left: 15px">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" name="optionsCheckboxes" {{if index $authList .Id}}checked=""{{end}}>
+                                                    <input type="checkbox" value="{{.Id}}" name="auth[]" {{if index $authList .Id}}checked=""{{end}}>
                                                 </label>
                                             </div>
                                         </td>
-                                        <td>{{.Name}} {{index $authList 6}} </td>
+                                        <td>{{.Name}}</td>
                                         <td>{{$parentName}}</td>
                                         <td><i class="material-icons">{{$parentIcons}}</i></td>
                                     </tr>
                                 {{end}}
 
                             {{end}}
+
                             </tbody>
                         </table>
                     </div>
+
+
+                    <div class="form-footer text-right" style="padding-left: 15px;">
+                        <button type="submit" class="btn btn-rose btn-fill">批量选择授权<div class="ripple-container"></div></button>
+                    </div>
+
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -61,6 +82,11 @@
 {{define "js"}}
 <script>
     $(document).ready(function() {
+        var checked = false;
+        $("#all").click(function () {
+            checked = checked == false ? true : false;
+            $(":checkbox").attr('checked', checked);
+        })
     });
 </script>
 {{end}}
