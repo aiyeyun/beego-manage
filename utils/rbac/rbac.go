@@ -3,6 +3,7 @@ package rbac
 import (
 	"manage/models"
 	"sync"
+	"manage/utils/global"
 )
 
 var once sync.Once
@@ -33,31 +34,33 @@ func GetRoleAuthMenus(role uint8) (models.MenuList, map[int]models.MenuList, map
 
 //初始化 角色授权 栏目表
 func InitRoleAuthMenus()  {
-	//查找授权
-	/*
-	queryAuth := func(parent models.MenuList, subNode map[int]models.MenuList, authList map[int]int) {
-
-	}
-	*/
-
 	init := func() {
-		/*
+		global.NewRoleAuthMenu()
+		model := models.MenuAuth{}
 		for k, _ := range GetRoles() {
-			model := models.MenuAuth{}
 			model.Role = k
-			parent, subNode, authList := model.GetAuthMenus()
-			//超管有全部权限
+
+			//超管有所有权限
 			if k == ROLE_SUPER_ADMIN {
-				menus := make(map[string]interface{}, 0)
-				menus["parent"]  = parent
-				menus["subNode"] = subNode
-				global.RoleAuthMenu.Set(k, menus)
+				parent, subNode, _ := model.GetAuthMenus()
+				node := make(map[string]interface{})
+				node["parent"] = parent
+				node["subNode"] = subNode
+				global.RoleAuthMenu.Set(k, node)
 				continue
 			}
 
-			queryAuth(parent, subNode, authList)
+			newParent, newSubNode := model.GetMenusByRole(model.GetAuthMenus())
+
+			if len(newParent) <= 0 {
+				continue
+			}
+
+			node := make(map[string]interface{})
+			node["parent"] = newParent
+			node["subNode"] = newSubNode
+			global.RoleAuthMenu.Set(k, node)
 		}
-		*/
 	}
 	once.Do(init)
 }

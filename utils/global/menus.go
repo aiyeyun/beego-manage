@@ -7,7 +7,7 @@ func (ram *roleAuthMenus) Get(key uint8) interface{} {
 }
 
 func (ram *roleAuthMenus) Set(key uint8, val interface{})  {
-	defer ram.m.Unlock()
 	ram.m.Lock()
+	defer ram.m.Unlock()
 	ram.List[key] = val
 }
