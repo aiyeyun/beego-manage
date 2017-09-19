@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/astaxie/beego"
 	"manage/models"
+	"manage/utils/rbac"
 )
 
 //ORM 初始化
@@ -39,4 +40,7 @@ func init()  {
 	orm.RegisterModelWithPrefix(db_prefix, new(models.Admin))
 	orm.RegisterModelWithPrefix(db_prefix, new(models.Menu))
 	orm.RegisterModelWithPrefix(db_prefix, new(models.MenuAuth))
+
+	//获取所有角色授权的栏目列表
+	rbac.InitRoleAuthMenus()
 }

@@ -57,3 +57,29 @@ func (model *MenuAuth) BatchAuth(role uint8, menuIds []string) {
 		})
 	}
 }
+
+//根据角色 获取所有栏目列表
+func (model *MenuAuth) GetMenusByRole()  {
+	o := orm.NewOrm()
+	list := make(MenuAuthList, 0)
+	o.QueryTable(model).Filter("role", model.Role).All(&list, "menu_id")
+	authMenus := make(map[int]int)
+	for _, v := range list {
+		authMenus[v.Id] = v.Id
+	}
+
+	/*
+	menuModel := Menu{}
+	parent, subNode := menuModel.GetNodes()
+	menus := make(map[uint8]interface{})
+
+	for _, parent_v := range parent {
+		sub_nodes := make(map[string]interface{})
+		for _, sub_v := range subNode[parent_v.Id] {
+			if _, ok := authMenus[sub_v.Id]; ok {
+				sub_nodes
+			}
+		}
+	}
+	*/
+}
