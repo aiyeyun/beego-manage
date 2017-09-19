@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"strings"
 	"strconv"
+	"manage/models"
 )
 
 // BaseController 基 controller
@@ -20,7 +21,7 @@ var (
 //构造函数
 func (c *BaseController) Prepare() {
 	//路由验证
-	//c.RouteAuth()
+	c.RouteAuth()
 
 	//读取 flash 消息
 	beego.ReadFromRequest(&c.Controller)
@@ -30,6 +31,10 @@ func (c *BaseController) Prepare() {
 	c.Data["xsrf_token"] = c.XSRFToken()
 	c.Data["copyright"] = Copyright
 	c.Data["requestUrl"] = c.Ctx.Request.RequestURI
+	if !c.IsGuest() {
+		//c.Data["role"] = int(c.GetSession("user").(*models.Admin).Role)
+		c.Data["role"] = c.GetSession("user").(*models.Admin).Role
+	}
 }
 
 //路由验证

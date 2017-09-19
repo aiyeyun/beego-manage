@@ -266,6 +266,12 @@
                     </a>
                 </li>
 
+                {{.role}}
+                {{$menus := Menus .role}}
+                {{range $parentKey, $info := index $menus "parent"}}
+                {{.Name}}
+                {{end}}
+
                 {{$requestUrl := .requestUrl}}
                 {{range $parentKey, $info := index MyMenus "parent"}}
                     {{$parentUrl := .Url}}

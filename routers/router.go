@@ -58,6 +58,7 @@ func init() {
 //自定义模板函数
 func addFuncMap()  {
 	beego.AddFuncMap("MyMenus", GetMyMenus)
+	beego.AddFuncMap("Menus", GetMenus)
 	beego.AddFuncMap("ParentMenuActive", ParentMenuActive)
 	beego.AddFuncMap("SubMenuActive", SubMenuActive)
 	beego.AddFuncMap("SubMenuBoxOpen", SubMenuBoxOpen)
