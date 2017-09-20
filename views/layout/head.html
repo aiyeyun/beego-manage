@@ -266,16 +266,12 @@
                     </a>
                 </li>
 
-                {{.role}}
                 {{$menus := Menus .role}}
-                {{range $parentKey, $info := index $menus "parent"}}
-                {{.Name}}
-                {{end}}
 
                 {{$requestUrl := .requestUrl}}
-                {{range $parentKey, $info := index MyMenus "parent"}}
+                    {{range $parentKey, $info := index $menus "parent"}}
                     {{$parentUrl := .Url}}
-                    {{$subMenus := index MyMenus "subNode" .Id}}
+                    {{$subMenus := index $menus "subNode" .Id}}
                     <li class="{{ParentMenuActive $requestUrl .Url}}">
                         <a data-toggle="collapse" href="#menu_{{$parentKey}}">
                             <i class="material-icons">{{.Icons}}</i>

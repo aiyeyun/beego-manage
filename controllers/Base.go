@@ -32,7 +32,6 @@ func (c *BaseController) Prepare() {
 	c.Data["copyright"] = Copyright
 	c.Data["requestUrl"] = c.Ctx.Request.RequestURI
 	if !c.IsGuest() {
-		//c.Data["role"] = int(c.GetSession("user").(*models.Admin).Role)
 		c.Data["role"] = c.GetSession("user").(*models.Admin).Role
 	}
 }

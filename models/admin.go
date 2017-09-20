@@ -17,7 +17,7 @@ type Admin struct {
 	Email    string
 	Password string `form:"password"`
 	Salt     string
-	Role     int8   //0~127
+	Role     uint8   //0~255
 	Last_ip  string
 	Created  int
 	Update   int64

@@ -119,8 +119,6 @@ func (model *Menu) GetNodelAll(p int) (MenuList, map[int]MenuList, *page.PageLin
 	//获取所有父节点
 	var parent MenuList
 	var pg *page.PageLinks
-	//parent, _ := model.GetParentNode()
-	//parent, pg, _ = model.GetParentNodePaging(p, 1)
 
 	if p >= 0 {
 		//需要分页
