@@ -120,17 +120,11 @@ func (model *Menu) GetNodelAll(p int) (MenuList, map[int]MenuList, *page.PageLin
 	var parent MenuList
 	var pg *page.PageLinks
 
-	if p >= 0 {
-		//需要分页
-		p_num := p
-		if p_num == 0 {
-			p_num = 1
-		}
-		parent, pg, _ = model.GetParentNodePaging(p_num, 1)
-	} else {
-		//不需要分页
-		parent, _ = model.GetParentNode()
+	//需要分页
+	if p == 0 {
+		p = 1
 	}
+	parent, pg, _ = model.GetParentNodePaging(p, 1)
 
 	node := make(map[int]MenuList, 0)
 	nodeQuery := func(pid int) (MenuList, error) {
@@ -147,11 +141,6 @@ func (model *Menu) GetNodelAll(p int) (MenuList, map[int]MenuList, *page.PageLin
 	for i := range parent {
 		subNode, _ := nodeQuery(parent[i].Id)
 		node[parent[i].Id] = subNode
-	}
-
-	//不需要分页 返回
-	if p < 0 {
-		return parent, node, nil
 	}
 
 	return parent, node, pg

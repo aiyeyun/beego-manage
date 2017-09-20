@@ -6,16 +6,6 @@ import (
 	"manage/utils/global"
 )
 
-//获取我的 menu 列表
-func GetMyMenus() (map[string]interface{}) {
-	model := models.Menu{}
-	parent, subNode, _ := model.GetNodelAll(-1)
-	nodes := make(map[string]interface{})
-	nodes["parent"] = parent
-	nodes["subNode"] = subNode
-	return nodes
-}
-
 //获取角色 menu 列表
 func GetMenus(role uint8) (map[string]interface{}) {
 	parent  := global.RoleAuthMenu.Get(role).(map[string]interface{})["parent"]
