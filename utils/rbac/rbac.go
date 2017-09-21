@@ -36,44 +36,77 @@ func GetRoleAuthMenus(role uint8) (models.MenuList, map[int]models.MenuList, map
 
 //初始化 角色授权 栏目表
 func InitRoleAuthMenus()  {
-	initMenus := func() {
-		//初始化 全局变量
-		global.NewRoleAuthMenu()
+	onceMenus.Do(rabcInit)
+}
 
-		//获取 所有节点
-		menuModel := models.Menu{}
-		parent, subNode := menuModel.GetNodes()
+//初始化 rbac
+func rabcInit()  {
+	//初始化 全局变量
+	global.NewRoleAuthMenu()
+	global.NewRoleAuthUrl()
+	//获取 所有节点
+	menuModel := models.Menu{}
+	parent, subNode := menuModel.GetNodes()
 
-		authMenuModel := models.MenuAuth{}
-		for role, _ := range GetRoles() {
-			//获取角色 所有授权的栏目IDS
-			authMenuModel.Role = role
-			authMenus := authMenuModel.GetAuthMenusByRole()
+	authMenuModel := models.MenuAuth{}
+	for role, _ := range GetRoles() {
+		//获取角色 所有授权的栏目IDS
+		authMenuModel.Role = role
+		authMenus := authMenuModel.GetAuthMenusByRole()
+		UpdateRoleMenus(role, parent, subNode, authMenus)
+		UpdateRoleUrl(role, parent, subNode, authMenus)
+	}
+}
 
-			//超管的权限
-			if role == ROLE_SUPER_ADMIN {
-				node := make(map[string]interface{})
-				node["parent"] = parent
-				node["subNode"] = subNode
-				global.RoleAuthMenu.Set(role, node)
-				continue
-			}
-
-			//解析 角色权限
-			newParent, newSubNode := analysisRoleAuthMenus(parent, subNode, authMenus)
-
-			if len(newParent) == 0 {
-				continue
-			}
-
-			node := make(map[string]interface{})
-			node["parent"] = newParent
-			node["subNode"] = newSubNode
-			global.RoleAuthMenu.Set(role, node)
-		}
+//更新 角色栏目权限
+func UpdateRoleMenus(role uint8, parent models.MenuList, subNode map[int]models.MenuList, authMenus map[int]int)  {
+	node := make(map[string]interface{})
+	//超管的权限
+	if role == ROLE_SUPER_ADMIN {
+		node["parent"] = parent
+		node["subNode"] = subNode
+		global.RoleAuthMenu.Set(role, node)
+		return
 	}
 
-	onceMenus.Do(initMenus)
+	//解析 角色权限
+	newParent, newSubNode := analysisRoleAuthMenus(parent, subNode, authMenus)
+
+	node["parent"] = newParent
+	node["subNode"] = newSubNode
+	global.RoleAuthMenu.Set(role, node)
+}
+
+//更新 角色路由权限
+func UpdateRoleUrl(role uint8, parent models.MenuList, subNode map[int]models.MenuList, authMenus map[int]int)  {
+	urls := make(map[string]string)
+
+	//超管的权限
+	if role == ROLE_SUPER_ADMIN {
+		for _, parent_v := range parent {
+			for _, sub_v:= range subNode[parent_v.Id] {
+				if parent_v.Url == "" || sub_v.Url == "" {
+					continue
+				}
+				urls[parent_v.Url + sub_v.Url] = parent_v.Url + sub_v.Url
+			}
+		}
+		global.RoleAuthUrl.Set(role, urls)
+		return
+	}
+
+	//解析 角色权限
+	newParent, newSubNode := analysisRoleAuthMenus(parent, subNode, authMenus)
+
+	for _, parent_v := range newParent {
+		for _, sub_v:= range newSubNode[parent_v.Id] {
+			if parent_v.Url == "" || sub_v.Url == "" {
+				continue
+			}
+			urls[parent_v.Url + sub_v.Url] = parent_v.Url + sub_v.Url
+		}
+	}
+	global.RoleAuthUrl.Set(role, urls)
 }
 
 //解析 角色授权 的栏目
