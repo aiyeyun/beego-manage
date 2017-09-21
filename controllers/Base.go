@@ -6,6 +6,8 @@ import (
 	"strings"
 	"strconv"
 	"manage/models"
+	"manage/utils/global"
+	"manage/utils/rbac"
 )
 
 // BaseController 基 controller
@@ -65,6 +67,27 @@ func (c *BaseController) RouteAuth()  {
 		return
 	}
 
+	//检查角色路由权限
+	if isGuest {
+		return
+	}
+
+	//超管不用检查路由权限
+	if c.GetSession("user").(*models.Admin).Role == rbac.ROLE_SUPER_ADMIN {
+		return
+	}
+
+	auth := false
+	roleUrls := global.RoleAuthUrl.Get(c.GetSession("user").(*models.Admin).Role)
+	for k, _ := range roleUrls {
+		if runControllerName == k || strings.Contains(runControllerName, k) {
+			auth = true
+		}
+	}
+	if !auth {
+		c.Ctx.WriteString("大兄弟你没有权限啊")
+		return
+	}
 }
 
 //模板输出
