@@ -6,7 +6,9 @@ import (
 	"manage/utils/global"
 )
 
-var once sync.Once
+var onceMenus sync.Once
+
+var onceMenuUrls sync.Once
 
 const (
 	ROLE_SUPER_ADMIN uint8 = 1 //超级管理员
@@ -34,33 +36,65 @@ func GetRoleAuthMenus(role uint8) (models.MenuList, map[int]models.MenuList, map
 
 //初始化 角色授权 栏目表
 func InitRoleAuthMenus()  {
-	init := func() {
+	initMenus := func() {
+		//初始化 全局变量
 		global.NewRoleAuthMenu()
-		model := models.MenuAuth{}
-		for k, _ := range GetRoles() {
-			model.Role = k
 
-			//超管有所有权限
-			if k == ROLE_SUPER_ADMIN {
-				parent, subNode, _ := model.GetAuthMenus()
+		//获取 所有节点
+		menuModel := models.Menu{}
+		parent, subNode := menuModel.GetNodes()
+
+		authMenuModel := models.MenuAuth{}
+		for role, _ := range GetRoles() {
+			//获取角色 所有授权的栏目IDS
+			authMenuModel.Role = role
+			authMenus := authMenuModel.GetAuthMenusByRole()
+
+			//超管的权限
+			if role == ROLE_SUPER_ADMIN {
 				node := make(map[string]interface{})
 				node["parent"] = parent
 				node["subNode"] = subNode
-				global.RoleAuthMenu.Set(k, node)
+				global.RoleAuthMenu.Set(role, node)
 				continue
 			}
 
-			newParent, newSubNode := model.GetMenusByRole(model.GetAuthMenus())
+			//解析 角色权限
+			newParent, newSubNode := analysisRoleAuthMenus(parent, subNode, authMenus)
 
-			if len(newParent) <= 0 {
+			if len(newParent) == 0 {
 				continue
 			}
 
 			node := make(map[string]interface{})
 			node["parent"] = newParent
 			node["subNode"] = newSubNode
-			global.RoleAuthMenu.Set(k, node)
+			global.RoleAuthMenu.Set(role, node)
 		}
 	}
-	once.Do(init)
+
+	onceMenus.Do(initMenus)
+}
+
+//解析 角色授权 的栏目
+//根据角色 获取所有栏目列表
+func analysisRoleAuthMenus(parent models.MenuList, subNode map[int]models.MenuList, authMenus map[int]int) (models.MenuList,  map[int]models.MenuList) {
+	newParentNode := make(models.MenuList, 0)
+	newSubNode := make(map[int]models.MenuList)
+
+	for _, parent_v := range parent {
+		node := make(models.MenuList, 0)
+		for _, sub_v := range subNode[parent_v.Id] {
+			if _, ok := authMenus[sub_v.Id]; ok {
+				node = append(node, sub_v)
+			}
+		}
+
+		if len(node) >0 {
+			newParentNode = append(newParentNode, parent_v)
+			newSubNode[parent_v.Id] = node
+		}
+	}
+
+	return newParentNode, newSubNode
 }
