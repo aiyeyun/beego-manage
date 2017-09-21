@@ -13,6 +13,8 @@ type LoginContrller struct {
 
 //视图
 func (c *LoginContrller) Get()  {
+	c.Jump()
+	return
 	c.TplName = "login/index.html"
 }
 

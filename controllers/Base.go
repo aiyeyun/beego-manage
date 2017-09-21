@@ -90,6 +90,11 @@ func (c *BaseController) RouteAuth()  {
 	}
 }
 
+//跳转路由
+func (c *BaseController) Jump()  {
+	c.TplName = "errors/jump.html"
+}
+
 //模板输出
 func (c *BaseController) Display(template string)  {
 	c.TplExt = "html"
