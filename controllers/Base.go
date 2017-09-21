@@ -8,6 +8,7 @@ import (
 	"manage/models"
 	"manage/utils/global"
 	"manage/utils/rbac"
+	"fmt"
 )
 
 // BaseController 基 controller
@@ -85,13 +86,31 @@ func (c *BaseController) RouteAuth()  {
 		}
 	}
 	if !auth {
-		c.Ctx.WriteString("大兄弟你没有权限啊")
+		c.Jump("大兄弟你没有权限啊")
 		return
 	}
 }
 
 //跳转路由
-func (c *BaseController) Jump()  {
+func (c *BaseController) Jump(bodyTxt string, args ...interface{})  {
+	fmt.Println("你看来源地址", c.Ctx.Request.Referer())
+	c.Data["bodyTxt"] = bodyTxt
+	//跳转来源地址
+	referer := c.Ctx.Request.Referer()
+	if referer == "" {
+		referer = "/"
+	}
+	c.Data["url"] = referer
+	c.Data["second"] = 6
+
+	if len(args) > 0 {
+		c.Data["url"] = args[0]
+	}
+
+	if len(args) >= 2 {
+		c.Data["second"] = args[1]
+	}
+
 	c.TplName = "errors/jump.html"
 }
 
