@@ -39,7 +39,7 @@ func init() {
 	//管理员列表
 	beego.Router("/admin", &controllers.AdminController{})
 	//角色授权
-	beego.Router("/admin/auth/?:role([0-9]+)", &controllers.AdminController{}, "get:Auth;post:Auth")
+	beego.Router("/admin/auth/?:role([0-9]+)", &controllers.AdminController{}, "get:Auth;post:BatchAuth")
 
 
 	//Errors 错误渲染
