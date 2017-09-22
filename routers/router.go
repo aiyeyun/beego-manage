@@ -27,9 +27,9 @@ func init() {
 
 	//----------------------------------  菜单栏  ----------------------------------
 	//菜单栏管理
-	beego.Router("/menu", &controllers.MenuController{})
+	beego.Router("/menu/index", &controllers.MenuController{})
 	//菜单栏目 分页请求页
-	beego.Router("/menu/?:p([0-9]+)", &controllers.MenuController{})
+	beego.Router("/menu/index/?:p([0-9]+)", &controllers.MenuController{})
 	//添加 编辑 菜单栏 Form 表单 视图页面
 	beego.Router("/menu/form/?:id([0-9]+)", &controllers.MenuController{}, "get:Form;post:Form")
 

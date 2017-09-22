@@ -3,6 +3,7 @@ package controllers
 import (
 	"manage/utils/models/MenuModelUtil"
 	"manage/models"
+	"fmt"
 )
 
 type MenuController struct {
@@ -19,6 +20,8 @@ func (c *MenuController) Get()  {
 	c.Data["page"] = page.GetLinks()
 	c.Data["parent"] = parent
 	c.Data["subNode"] = subNode
+
+	fmt.Println("sssssssssss", parent[0])
 	c.Display("index")
 }
 

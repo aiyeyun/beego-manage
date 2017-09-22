@@ -78,7 +78,7 @@ func (model *Menu) GetParentNode() (MenuList, error) {
 	o := orm.NewOrm()
 	menuList := make(MenuList, 0)
 	_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE).
-		OrderBy("-sort").Limit(-1).All(&menuList)
+		OrderBy("sort").Limit(-1).All(&menuList)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (model *Menu) GetParentNodePaging(p, limit int) (MenuList, *page.PageLinks,
 
 	menuList := make(MenuList, 0)
 	_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE).
-		OrderBy("-sort").Limit(limit).Offset(pg.GetOffset()).All(&menuList)
+		OrderBy("sort").Limit(limit).Offset(pg.GetOffset()).All(&menuList)
 
 	if err != nil {
 		return nil, nil, err
@@ -155,7 +155,7 @@ func (model *Menu) GetNodes() (MenuList, map[int]MenuList) {
 		o := orm.NewOrm()
 		menuList := make(MenuList, 0)
 		_, err := o.QueryTable(model).Filter("pid", pid).
-			OrderBy("-sort").Limit(-1).All(&menuList)
+			OrderBy("sort").Limit(-1).All(&menuList)
 		if err != nil {
 			return nil, err
 		}
