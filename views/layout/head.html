@@ -73,51 +73,42 @@
                         <p>Consloe</p>
                     </a>
                 </li>
+
+                {{if eq GetSuperAdmin .role}}
                 <li>
                     <a href="https://material.io/icons/" target="_blank">
                         <i class="material-icons">crop_free</i>
                         <p>Icons</p>
                     </a>
                 </li>
-                <li class="{{MenuActive .requestUrl "/menu"}}">
-                    <a data-toggle="collapse" href="#menu">
-                        <i class="material-icons">menu</i>
-                        <p>菜单栏
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse {{SubMenuBoxOpen .requestUrl "/menu"}}" id="menu" style="{{SubMenuBoxOpenStyle .requestUrl "/menu"}}">
-                        <ul class="nav">
-                            <li class="{{MenuActive .requestUrl "/menu" ""}}">
-                                <a href="/menu">菜单栏列表</a>
-                            </li>
-                            <li class="{{MenuActive .requestUrl "/menu" "/form"}}">
-                                <a href="/menu/form">添加菜单栏</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="{{MenuActive .requestUrl "/admin"}}">
-                    <a data-toggle="collapse" href="#menu_admin">
-                        <i class="material-icons">person</i>
-                        <p>管理员
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse {{SubMenuBoxOpen .requestUrl "/admin"}}" id="menu_admin" style="{{SubMenuBoxOpenStyle .requestUrl "/admin"}}">
-                        <ul class="nav">
-                            <li class="{{MenuActive .requestUrl "/admin" ""}}">
-                                <a href="/admin">管理员列表</a>
-                            </li>
-                            <li class="{{MenuActive .requestUrl "/admin" "/form"}}">
-                                <a href="/admin/form">添加管理员</a>
-                            </li>
-                            <li class="{{MenuActive .requestUrl "/admin" "/role"}}">
-                                <a href="/admin/role">管理员权限</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                {{end}}
+
+                {{$menus := Menus .role}}
+
+                {{$requestUrl := .requestUrl}}
+                {{range $parentKey, $info := index $menus "parent"}}
+                    {{$parentUrl := .Url}}
+                    {{$subMenus := index $menus "subNode" .Id}}
+                    <li class="{{MenuActive $requestUrl .Url}}">
+                        <a data-toggle="collapse" href="#menu_{{$parentKey}}">
+                            <i class="material-icons">{{.Icons}}</i>
+                            <p>{{.Name}}
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse {{SubMenuBoxOpen $requestUrl $parentUrl}}" id="menu_{{$parentKey}}" style="{{SubMenuBoxOpenStyle $requestUrl $parentUrl}}">
+                            <ul class="nav">
+                                {{range $subMenus}}
+                                <li class="{{MenuActive $requestUrl $parentUrl .Url}}">
+                                    <a href="{{$parentUrl}}{{.Url}}">{{.Name}}</a>
+                                </li>
+                                {{end}}
+                            </ul>
+                        </div>
+                    </li>
+                {{end}}
+
+
                 <li>
                     <a data-toggle="collapse" href="#pagesExamples">
                         <i class="material-icons">image</i>
@@ -265,31 +256,6 @@
                         <p>Calendar</p>
                     </a>
                 </li>
-
-                {{$menus := Menus .role}}
-
-                {{$requestUrl := .requestUrl}}
-                {{range $parentKey, $info := index $menus "parent"}}
-                    {{$parentUrl := .Url}}
-                    {{$subMenus := index $menus "subNode" .Id}}
-                    <li class="{{MenuActive $requestUrl .Url}}">
-                        <a data-toggle="collapse" href="#menu_{{$parentKey}}">
-                            <i class="material-icons">{{.Icons}}</i>
-                            <p>{{.Name}}
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse {{SubMenuBoxOpen $requestUrl $parentUrl}}" id="menu_{{$parentKey}}" style="{{SubMenuBoxOpenStyle $requestUrl $parentUrl}}">
-                            <ul class="nav">
-                                {{range $subMenus}}
-                                <li class="{{MenuActive $requestUrl $parentUrl .Url}}">
-                                    <a href="{{$parentUrl}}{{.Url}}">{{.Name}}</a>
-                                </li>
-                                {{end}}
-                            </ul>
-                        </div>
-                    </li>
-                {{end}}
 
             </ul>
         </div>

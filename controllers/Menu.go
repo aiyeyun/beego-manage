@@ -3,7 +3,6 @@ package controllers
 import (
 	"manage/utils/models/MenuModelUtil"
 	"manage/models"
-	"fmt"
 )
 
 type MenuController struct {
@@ -16,12 +15,11 @@ func (c *MenuController) Get()  {
 	model := new(models.Menu)
 
 	parent, subNode, page := model.GetNodelAll(p)
-	page.Href = "/menu"
+	page.Href = "/menu/index"
 	c.Data["page"] = page.GetLinks()
 	c.Data["parent"] = parent
 	c.Data["subNode"] = subNode
 
-	fmt.Println("sssssssssss", parent[0])
 	c.Display("index")
 }
 
