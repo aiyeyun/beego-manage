@@ -132,7 +132,7 @@ func (model *Menu) GetNodelAll(p int) (MenuList, map[int]MenuList, *page.PageLin
 		menuList := make(MenuList, 0)
 		_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).
 			Filter("pid", pid).
-			OrderBy("-sort").Limit(-1).All(&menuList)
+			OrderBy("sort").Limit(-1).All(&menuList)
 		if err != nil {
 			return nil, err
 		}

@@ -3,6 +3,7 @@ package routers
 import (
 	"strings"
 	"manage/utils/global"
+	"manage/utils/rbac"
 )
 
 //获取角色 menu 列表
@@ -15,23 +16,9 @@ func GetMenus(role uint8) (map[string]interface{}) {
 	return nodes
 }
 
-//被点击后 的menu Calss 显示
-func ParentMenuActive(url, testUrl string) string {
-	if testUrl == "" {
-		return ""
-	}
-	if strings.Contains(url, testUrl) {
-		return " active "
-	}
-	return ""
-}
-
-//子栏目 class 显示
-func SubMenuActive(url, parentUrl, subUrl string) string {
-	if parentUrl + subUrl == url {
-		return  " active "
-	}
-	return ""
+//获取超级管理员 角色
+func GetSuperAdmin() uint8 {
+	return rbac.ROLE_SUPER_ADMIN
 }
 
 //子栏目 是否展开
@@ -66,9 +53,26 @@ func MenuActive(url string, agrs ...string) string {
 	if url == "" || testUrl == "" {
 		return  ""
 	}
-	//if url == testUrl || strings.Contains(url, testUrl) {
+
 	if url == testUrl {
 		return  " active "
 	}
 	return ""
+}
+
+//URL 后缀是GET参数 ID
+func urlSuffixIsGetParam(url string) bool {
+	if strings.HasSuffix(url, "1") ||
+		strings.HasSuffix(url, "2") ||
+		strings.HasSuffix(url, "3") ||
+		strings.HasSuffix(url, "4") ||
+		strings.HasSuffix(url, "5") ||
+		strings.HasSuffix(url, "6") ||
+		strings.HasSuffix(url, "7") ||
+		strings.HasSuffix(url, "8") ||
+		strings.HasSuffix(url, "9") ||
+		strings.HasSuffix(url, "0") {
+			return true
+	}
+	return false
 }

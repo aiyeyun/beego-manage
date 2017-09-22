@@ -3,6 +3,8 @@
 
 {{template "layout/head.html" . }}
 
+{{ $role := .role}}
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -65,7 +67,6 @@
                             </tbody>
                         </table>
                     </div>
-
 
                     <div class="form-footer text-right" style="padding-left: 15px;">
                         <button type="submit" class="btn btn-rose btn-fill">批量选择授权<div class="ripple-container"></div></button>

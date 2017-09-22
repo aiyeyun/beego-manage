@@ -22,14 +22,11 @@
                             </thead>
                             <tbody>
 
-                            {{range $key, $val := .role_list}}
+                            {{range $role, $val := .role_list}}
                                 <tr>
                                     <td>{{$val}}</td>
                                     <td class="td-actions text-right">
-                                        <a href="/menu/form/" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="查看权限">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </a>
-                                        <a href="/menu/form/" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="编辑权限">
+                                        <a href="/admin/auth/{{$role}}" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="批量授权">
                                             <i class="material-icons">edit</i>
                                         </a>
                                     </td>

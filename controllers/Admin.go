@@ -12,6 +12,8 @@ type AdminController struct {
 
 //管理角色列表
 func (c *AdminController) Get()  {
+	roles := rbac.GetRoles()
+	delete(roles, rbac.ROLE_SUPER_ADMIN)
 	c.Data["role_list"] = rbac.GetRoles()
 	c.Display("role/_list")
 }

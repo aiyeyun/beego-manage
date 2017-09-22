@@ -60,6 +60,7 @@ func init() {
 func addFuncMap()  {
 	beego.AddFuncMap("Menus", GetMenus)
 	beego.AddFuncMap("MenuActive", MenuActive)
+	beego.AddFuncMap("GetSuperAdmin", GetSuperAdmin)
 	beego.AddFuncMap("SubMenuBoxOpen", SubMenuBoxOpen)
 	beego.AddFuncMap("SubMenuBoxOpenStyle", SubMenuBoxOpenStyle)
 }
