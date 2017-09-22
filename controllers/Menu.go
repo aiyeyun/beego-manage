@@ -57,3 +57,12 @@ func (c *MenuController) Form()  {
 
 	c.Display("_form")
 }
+
+//删除菜单栏目
+func (c *MenuController) Del()  {
+	id, _ := c.GetParamInt("id")
+	model := models.Menu{Id: id}
+	model.Delete()
+	c.SetSuccessFlash("删除成功")
+	c.Redirect("/menu/index", 302)
+}

@@ -172,3 +172,9 @@ func (model *Menu) GetNodes() (MenuList, map[int]MenuList) {
 
 	return parent, nodes
 }
+
+//删除菜单栏目
+func (model * Menu) Delete()  {
+	o := orm.NewOrm()
+	o.Delete(model)
+}

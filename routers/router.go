@@ -32,7 +32,8 @@ func init() {
 	beego.Router("/menu/index/?:p([0-9]+)", &controllers.MenuController{})
 	//添加 编辑 菜单栏 Form 表单 视图页面
 	beego.Router("/menu/form/?:id([0-9]+)", &controllers.MenuController{}, "get:Form;post:Form")
-
+	//删除 栏目
+	beego.Router("/menu/del/?:id([0-9]+)", &controllers.MenuController{}, "get:Del")
 
 
 	//----------------------------------  管理员  ----------------------------------
