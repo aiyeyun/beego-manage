@@ -85,9 +85,9 @@ func (c *BaseController) RouteAuth()  {
 			auth = true
 		}
 	}
+	fmt.Println("你看权限通过没", auth)
 	if !auth {
 		c.Jump("大兄弟你没有权限啊")
-		return
 	}
 }
 
@@ -112,6 +112,7 @@ func (c *BaseController) Jump(bodyTxt string, args ...interface{})  {
 	}
 
 	c.TplName = "errors/jump.html"
+	c.Render()
 }
 
 //模板输出

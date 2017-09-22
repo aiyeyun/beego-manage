@@ -6,9 +6,7 @@ import (
 	"manage/utils/global"
 )
 
-var onceMenus sync.Once
-
-var onceMenuUrls sync.Once
+var once sync.Once
 
 const (
 	ROLE_SUPER_ADMIN uint8 = 1 //超级管理员
@@ -36,7 +34,7 @@ func GetRoleAuthMenus(role uint8) (models.MenuList, map[int]models.MenuList, map
 
 //初始化 角色授权 栏目表
 func InitRoleAuthMenus()  {
-	onceMenus.Do(rabcInit)
+	once.Do(rabcInit)
 }
 
 //初始化 rbac
@@ -80,6 +78,7 @@ func UpdateRoleMenus(role uint8, parent models.MenuList, subNode map[int]models.
 //更新 角色路由权限
 func UpdateRoleUrl(role uint8, parent models.MenuList, subNode map[int]models.MenuList, authMenus map[int]int)  {
 	urls := make(map[string]string)
+	urls["/console"] = "/console"
 
 	//超管的权限
 	if role == ROLE_SUPER_ADMIN {
