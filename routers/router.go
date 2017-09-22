@@ -37,7 +37,8 @@ func init() {
 
 	//----------------------------------  管理员  ----------------------------------
 	//管理员列表
-	beego.Router("/admin", &controllers.AdminController{})
+	//beego.Router("/admin", &controllers.AdminController{})
+	beego.Router("/admin/role", &controllers.AdminController{})
 	//角色授权
 	beego.Router("/admin/auth/?:role([0-9]+)", &controllers.AdminController{}, "get:Auth;post:BatchAuth")
 
@@ -58,8 +59,7 @@ func init() {
 //自定义模板函数
 func addFuncMap()  {
 	beego.AddFuncMap("Menus", GetMenus)
-	beego.AddFuncMap("ParentMenuActive", ParentMenuActive)
-	beego.AddFuncMap("SubMenuActive", SubMenuActive)
+	beego.AddFuncMap("MenuActive", MenuActive)
 	beego.AddFuncMap("SubMenuBoxOpen", SubMenuBoxOpen)
 	beego.AddFuncMap("SubMenuBoxOpenStyle", SubMenuBoxOpenStyle)
 }

@@ -55,3 +55,20 @@ func SubMenuBoxOpenStyle(url, testUrl string) string {
 	}
 	return "height: 0px;"
 }
+
+//栏目是否有 active class
+func MenuActive(url string, agrs ...string) string {
+	var testUrl string = ""
+	for _, v := range agrs {
+		testUrl += v
+	}
+
+	if url == "" || testUrl == "" {
+		return  ""
+	}
+	//if url == testUrl || strings.Contains(url, testUrl) {
+	if url == testUrl {
+		return  " active "
+	}
+	return ""
+}
