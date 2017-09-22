@@ -3,6 +3,8 @@ package controllers
 import (
 	"manage/utils/models/MenuModelUtil"
 	"manage/models"
+	"manage/utils/rbac"
+	"fmt"
 )
 
 type MenuController struct {
@@ -42,9 +44,12 @@ func (c *MenuController) Form()  {
 
 	if c.Ctx.Input.IsPost() {
 		c.ParseForm(model)
+		fmt.Println("我看赋值厚", model)
 		_, err := model.Save()
 		if err == nil {
-			c.Redirect("/menu", 302)
+			//更新 角色路由 与 角色栏目 权限 更新全局栏目缓存
+			rbac.RabcUpdate()
+			c.Redirect("/menu/index", 302)
 			return
 		}
 		c.SetErrorFlash(err.Error())

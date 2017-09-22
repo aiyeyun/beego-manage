@@ -70,6 +70,7 @@ func (model *Menu) Save() (int64, error) {
 	//新增
 	model.Created = time.Now().Unix()
 	id, err := o.Insert(model)
+
 	return id, err
 }
 
@@ -89,7 +90,8 @@ func (model *Menu) GetParentNode() (MenuList, error) {
 //分页返回
 func (model *Menu) GetParentNodePaging(p, limit int) (MenuList, *page.PageLinks, error) {
 	o := orm.NewOrm()
-	query := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE)
+	//query := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE)
+	query := o.QueryTable(model).Filter("pid", MenuModelUtil.PARENT_NODE)
 	pg := &page.PageLinks{
 		Currentpage: p,
 		PageDataSize: limit,
@@ -98,7 +100,8 @@ func (model *Menu) GetParentNodePaging(p, limit int) (MenuList, *page.PageLinks,
 
 
 	menuList := make(MenuList, 0)
-	_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE).
+	//_, err := o.QueryTable(model).Filter("status", MenuModelUtil.STATUS_OPEN).Filter("pid", MenuModelUtil.PARENT_NODE).
+	_, err := o.QueryTable(model).Filter("pid", MenuModelUtil.PARENT_NODE).
 		OrderBy("sort").Limit(limit).Offset(pg.GetOffset()).All(&menuList)
 
 	if err != nil {

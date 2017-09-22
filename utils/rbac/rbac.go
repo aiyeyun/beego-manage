@@ -34,11 +34,11 @@ func GetRoleAuthMenus(role uint8) (models.MenuList, map[int]models.MenuList, map
 
 //初始化 角色授权 栏目表
 func InitRoleAuthMenus()  {
-	once.Do(rabcInit)
+	once.Do(RabcUpdate)
 }
 
 //初始化 rbac
-func rabcInit()  {
+func RabcUpdate()  {
 	//初始化 全局变量
 	global.NewRoleAuthMenu()
 	global.NewRoleAuthUrl()
