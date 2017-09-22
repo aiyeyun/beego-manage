@@ -63,6 +63,8 @@ func (c *MenuController) Del()  {
 	id, _ := c.GetParamInt("id")
 	model := models.Menu{Id: id}
 	model.Delete()
+	//更新 角色路由 与 角色栏目 权限 更新全局栏目缓存
+	rbac.RabcUpdate()
 	c.SetSuccessFlash("删除成功")
 	c.Redirect("/menu/index", 302)
 }
