@@ -8,7 +8,10 @@ import (
 	"time"
 	"github.com/astaxie/beego/validation"
 	"manage/utils"
+	"manage/utils/page"
 )
+
+type AdminList []*Admin
 
 type Admin struct {
 	BaseModel
@@ -17,6 +20,7 @@ type Admin struct {
 	Nickname string `form:"nickname"`
 	Email    string `form:"email"`
 	Password string `form:"password"`
+	Portrait string `form:"portrait"`
 	Salt     string
 	Role     uint8  `form:"role"` //0~255
 	Last_ip  string
@@ -123,4 +127,19 @@ func (model *Admin) Save(superAdmin uint8, user *Admin) error {
 	model.Password = md5Psw
 	_, err = o.Insert(model)
 	return err
+}
+
+//所有管理员
+func (model *Admin) Admins(p int, limit int) (AdminList, *page.PageLinks) {
+	o := orm.NewOrm()
+	adminList := make(AdminList, 0)
+	querySeter := o.QueryTable(model)
+	page := &page.PageLinks{
+		Currentpage: p,
+		PageDataSize: limit,
+		Query: querySeter,
+	}
+
+	querySeter.OrderBy("created").Limit(limit).Offset(page.GetOffset()).All(&adminList)
+	return adminList, page
 }

@@ -7,6 +7,67 @@
 
 {{template "layout/head.html" . }}
 
+<div class="container-fluid dataTables_wrapper">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="rose">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <h4 class="card-title">管理员列表</h4>
+                <div class="card-content">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>UID</th>
+                                <th>用户名</th>
+                                <th>昵称</th>
+                                <th>邮箱</th>
+                                <th>角色</th>
+                                <th>注册时间</th>
+                                <th>最后登录IP</th>
+                                <th>最后登录时间</th>
+                                <th class="disabled-sorting text-right">管理操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {{range .admins}}
+                                <tr>
+                                    <td>{{.Id}}</td>
+                                    <td>{{.Username}}</td>
+                                    <td>{{.Nickname}}</td>
+                                    <td>{{.Email}}</td>
+                                    <td>{{.Role}}</td>
+                                    <td>{{.Role}}</td>
+                                    <td>{{.Created}}</td>
+                                    <td>{{.Last_ip}}</td>
+                                    <td>{{.Update}}</td>
+                                    <td class="td-actions text-right">
+                                        <a href="/menu/form/{{.Id}}" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                        <a href="/menu/del/{{.Id}}" type="button" rel="tooltip" class="btn btn-danger del-btn" data-original-title="" title="">
+                                            <i class="material-icons">close</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {{end}}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{str2html .page}}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {{template "layout/tail.html" . }}
 
 {{define "js"}}

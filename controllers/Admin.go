@@ -50,13 +50,18 @@ func (c *AdminController) BatchAuth()  {
 
 //管理员列表
 func (c *AdminController) Users()  {
+	p, _ := c.GetParamInt("p")
+	model := models.Admin{}
+	admins, page := model.Admins(p, 2)
+	page.Href = "/admin/index"
+	c.Data["admins"] = admins
+	c.Data["page"] = page.GetLinks()
 	c.Display("index")
 }
 
 //添加编辑 用户信息
 func (c *AdminController) Form()  {
-	model := &models.Admin{Id: id}
-
+	model := &models.Admin{}
 	if c.Ctx.Input.IsPost() {
 		c.ParseForm(model)
 		err := model.Save(rbac.ROLE_SUPER_ADMIN, c.GetSession("user").(*models.Admin))
