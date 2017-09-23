@@ -4,7 +4,6 @@ import (
 	"manage/utils/rbac"
 	"manage/models"
 	"strconv"
-	"fmt"
 )
 
 type AdminController struct {
@@ -70,7 +69,7 @@ func (c *AdminController) Form()  {
 		c.ParseForm(model)
 		err := model.Save(rbac.ROLE_SUPER_ADMIN, c.GetSession("user").(*models.Admin))
 		if err == nil {
-			c.SetSuccessFlash("添加成功")
+			c.SetSuccessFlash("管理员添加成功")
 			c.Redirect("/admin/index", 302)
 			return
 		}
@@ -80,6 +79,5 @@ func (c *AdminController) Form()  {
 	//获取所有角色
 	c.Data["role_list"] = rbac.GetRoles()
 	c.Data["model"]     = model
-	fmt.Println("看 model", model.Role, model)
 	c.Display("_form")
 }
