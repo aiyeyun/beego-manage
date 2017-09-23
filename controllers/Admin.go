@@ -55,15 +55,7 @@ func (c *AdminController) Users()  {
 
 //添加编辑 用户信息
 func (c *AdminController) Form()  {
-	id, _ := c.GetParamInt("id")
 	model := &models.Admin{Id: id}
-
-	err := model.GetModelById()
-	if err != nil && id > 0 {
-		c.SetErrorFlash("找不到该记录")
-		c.Redirect("/admin/index", 302)
-		return
-	}
 
 	if c.Ctx.Input.IsPost() {
 		c.ParseForm(model)

@@ -87,7 +87,7 @@ func (model *Admin) GetModelById() error {
 	return o.Read(model)
 }
 
-//添加管理员 编辑管理员
+//添加管理员
 func (model *Admin) Save(superAdmin uint8, user *Admin) error {
 	err := model.ValidateSave()
 	if err != nil {
