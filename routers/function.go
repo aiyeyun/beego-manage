@@ -21,6 +21,11 @@ func GetSuperAdmin() uint8 {
 	return rbac.ROLE_SUPER_ADMIN
 }
 
+//获取所有 角色
+func GetRoles() map[uint8]string {
+	return rbac.GetRoles()
+}
+
 //子栏目 是否展开
 func SubMenuBoxOpen(url, testUrl string) string {
 	if testUrl == "" {
