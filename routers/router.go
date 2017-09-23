@@ -38,7 +38,9 @@ func init() {
 
 	//----------------------------------  管理员  ----------------------------------
 	//管理员列表
-	//beego.Router("/admin", &controllers.AdminController{})
+	beego.Router("/admin/index", &controllers.AdminController{}, "get:Users")
+	beego.Router("/admin/form", &controllers.AdminController{}, "*:Form")
+	//角色列表
 	beego.Router("/admin/role", &controllers.AdminController{})
 	//角色授权
 	beego.Router("/admin/auth/?:role([0-9]+)", &controllers.AdminController{}, "get:Auth;post:BatchAuth")

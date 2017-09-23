@@ -13,11 +13,11 @@ type Admin struct {
 	BaseModel
 	Id       int
 	Username string `form:"username"`
-	Nickname string
-	Email    string
+	Nickname string `form:"nickname"`
+	Email    string `form:"email"`
 	Password string `form:"password"`
 	Salt     string
-	Role     uint8   //0~255
+	Role     uint8  `form:"role"` //0~255
 	Last_ip  string
 	Created  int
 	Update   int64
@@ -33,6 +33,20 @@ func (model *Admin) Validate() error {
 	valid := validation.Validation{}
 	valid.Required(model.Username, "用户名").Message("请填写用户名")
 	valid.Required(model.Password, "密码").Message("请填写密码")
+	if valid.HasErrors() {
+		return errors.New(valid.Errors[0].Message)
+	}
+	return nil
+}
+
+//添加管理员验证
+func (model *Admin) ValidateAdd() error {
+	valid := validation.Validation{}
+	valid.Required(model.Username, "用户名").Message("请填写用户名")
+	valid.Required(model.Password, "密码").Message("请填写密码")
+	valid.Required(model.Nickname, "昵称").Message("请填写昵称")
+	valid.Required(model.Email, "邮箱").Message("请填写邮箱地址")
+	valid.Required(model.Role, "角色").Message("请选择角色")
 	if valid.HasErrors() {
 		return errors.New(valid.Errors[0].Message)
 	}
@@ -64,4 +78,15 @@ func (model *Admin) Login() error {
 	model.Update = time.Now().Unix()
 	o.Update(model, "last_ip", "update")
 	return nil
+}
+
+//根据ID 获取model
+func (model *Admin) GetModelById() error {
+	o := orm.NewOrm()
+	return o.Read(model)
+}
+
+//添加管理员
+func (model *Admin) AddAdminUser()  {
+
 }

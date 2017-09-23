@@ -47,3 +47,29 @@ func (c *AdminController) BatchAuth()  {
 	c.SetSuccessFlash("批量授权成功")
 	c.Redirect("/admin/auth/" + roleStr, 302)
 }
+
+//管理员列表
+func (c *AdminController) Users()  {
+	c.Display("index")
+}
+
+//添加编辑 用户信息
+func (c *AdminController) Form()  {
+	id, _ := c.GetParamInt("id")
+	model := &models.Admin{Id: id}
+
+	err := model.GetModelById()
+	if err != nil && id > 0 {
+		c.SetErrorFlash("找不到该记录")
+		c.Redirect("/menu", 302)
+		return
+	}
+
+	if c.Ctx.Input.IsPost() {
+		c.ParseForm(model)
+	}
+
+	//获取所有角色
+	c.Data["role_list"] = rbac.GetRoles()
+	c.Display("_form")
+}

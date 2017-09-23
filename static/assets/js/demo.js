@@ -282,17 +282,21 @@ demo = {
         // Code for the Validator
         var $validator = $('.wizard-card form').validate({
     		  rules: {
-    		    firstname: {
+    		    username: {
     		      required: true,
-    		      minlength: 3
+    		      minlength: 6
     		    },
-    		    lastname: {
+    		    password: {
     		      required: true,
-    		      minlength: 3
+    		      minlength: 6
     		    },
+                nickname: {
+    		        required: true,
+                    minlength: 2,
+                },
     		    email: {
     		      required: true,
-    		      minlength: 3,
+    		      minlength: 6,
     		    }
             },
 
@@ -438,22 +442,43 @@ demo = {
         });
 
         function refreshAnimation($wizard, index){
-            total_steps = $wizard.find('li').length;
+            $total = $wizard.find('.nav li').length;
+            $li_width = 100 / $total;
+
+            total_steps = $wizard.find('.nav li').length;
             move_distance = $wizard.width() / total_steps;
+            index_temp = index;
+            vertical_level = 0;
+
+            mobile_device = $(document).width() < 600 && $total > 3;
+
+            if (mobile_device) {
+                move_distance = $wizard.width() / 2;
+                index_temp = index % 2;
+                $li_width = 50;
+            }
+
+            $wizard.find('.nav li').css('width', $li_width + '%');
+
             step_width = move_distance;
-            move_distance *= index;
+            move_distance = move_distance * index_temp;
 
             $current = index + 1;
 
-            if($current == 1){
+            if ($current == 1 || (mobile_device == true && (index % 2 == 0))) {
                 move_distance -= 8;
-            } else if($current == total_steps){
+            } else if ($current == total_steps || (mobile_device == true && (index % 2 == 1))) {
                 move_distance += 8;
+            }
+
+            if (mobile_device) {
+                vertical_level = parseInt(index / 2);
+                vertical_level = vertical_level * 38;
             }
 
             $wizard.find('.moving-tab').css('width', step_width);
             $('.moving-tab').css({
-                'transform':'translate3d(' + move_distance + 'px, 0, 0)',
+                'transform': 'translate3d(' + move_distance + 'px, ' + vertical_level + 'px, 0)',
                 'transition': 'all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1)'
 
             });
