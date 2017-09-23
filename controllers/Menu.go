@@ -4,7 +4,6 @@ import (
 	"manage/utils/models/MenuModelUtil"
 	"manage/models"
 	"manage/utils/rbac"
-	"fmt"
 )
 
 type MenuController struct {
@@ -25,7 +24,7 @@ func (c *MenuController) Get()  {
 	c.Display("index")
 }
 
-//表单
+//表单 批量授权
 func (c *MenuController) Form()  {
 	id, _ := c.GetParamInt("id")
 
@@ -44,7 +43,6 @@ func (c *MenuController) Form()  {
 
 	if c.Ctx.Input.IsPost() {
 		c.ParseForm(model)
-		fmt.Println("我看赋值厚", model)
 		_, err := model.Save()
 		if err == nil {
 			//更新 角色路由 与 角色栏目 权限 更新全局栏目缓存

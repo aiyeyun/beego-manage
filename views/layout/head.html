@@ -74,7 +74,7 @@
                     </a>
                 </li>
 
-                {{if eq GetSuperAdmin .role}}
+                {{if eq GetSuperAdmin .current_role}}
                 <li>
                     <a href="https://material.io/icons/" target="_blank">
                         <i class="material-icons">crop_free</i>
@@ -83,7 +83,7 @@
                 </li>
                 {{end}}
 
-                {{$menus := Menus .role}}
+                {{$menus := Menus .current_role}}
 
                 {{$requestUrl := .requestUrl}}
                 {{range $parentKey, $info := index $menus "parent"}}

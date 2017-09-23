@@ -8,7 +8,6 @@ import (
 	"manage/models"
 	"manage/utils/global"
 	"manage/utils/rbac"
-	"fmt"
 )
 
 // BaseController 基 controller
@@ -35,7 +34,7 @@ func (c *BaseController) Prepare() {
 	c.Data["copyright"] = Copyright
 	c.Data["requestUrl"] = c.Ctx.Request.RequestURI
 	if !c.IsGuest() {
-		c.Data["role"] = c.GetSession("user").(*models.Admin).Role
+		c.Data["current_role"] = c.GetSession("user").(*models.Admin).Role
 	}
 }
 
@@ -85,7 +84,7 @@ func (c *BaseController) RouteAuth()  {
 			auth = true
 		}
 	}
-	fmt.Println("你看权限通过没", auth)
+
 	if !auth {
 		c.Jump("大兄弟你没有权限啊")
 	}
@@ -93,7 +92,6 @@ func (c *BaseController) RouteAuth()  {
 
 //跳转路由
 func (c *BaseController) Jump(bodyTxt string, args ...interface{})  {
-	fmt.Println("你看来源地址", c.Ctx.Request.Referer())
 	c.Data["bodyTxt"] = bodyTxt
 	//跳转来源地址
 	referer := c.Ctx.Request.Referer()
