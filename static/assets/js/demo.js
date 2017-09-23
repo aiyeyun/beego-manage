@@ -284,11 +284,11 @@ demo = {
     		  rules: {
     		    username: {
     		      required: true,
-    		      minlength: 6
+    		      minlength: 5
     		    },
     		    password: {
     		      required: true,
-    		      minlength: 6
+    		      minlength: 5
     		    },
                 nickname: {
     		        required: true,

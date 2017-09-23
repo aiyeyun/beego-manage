@@ -7,6 +7,7 @@ import (
 	"errors"
 	"time"
 	"github.com/astaxie/beego/validation"
+	"manage/utils"
 )
 
 type Admin struct {
@@ -19,7 +20,7 @@ type Admin struct {
 	Salt     string
 	Role     uint8  `form:"role"` //0~255
 	Last_ip  string
-	Created  int
+	Created  int64
 	Update   int64
 }
 
@@ -40,7 +41,7 @@ func (model *Admin) Validate() error {
 }
 
 //添加管理员验证
-func (model *Admin) ValidateAdd() error {
+func (model *Admin) ValidateSave() error {
 	valid := validation.Validation{}
 	valid.Required(model.Username, "用户名").Message("请填写用户名")
 	valid.Required(model.Password, "密码").Message("请填写密码")
@@ -86,7 +87,40 @@ func (model *Admin) GetModelById() error {
 	return o.Read(model)
 }
 
-//添加管理员
-func (model *Admin) AddAdminUser()  {
+//添加管理员 编辑管理员
+func (model *Admin) Save(superAdmin uint8, user *Admin) error {
+	err := model.ValidateSave()
+	if err != nil {
+		return err
+	}
 
+	o := orm.NewOrm()
+	querySeter := o.QueryTable(model)
+	model.Update = time.Now().Unix()
+
+	//新增
+	//检查 账号 邮箱 昵称是否存在
+	if querySeter.Filter("username", model.Username).Exist() {
+		return errors.New("用户名已存在")
+	}
+
+	if querySeter.Filter("nickname", model.Nickname).Exist() {
+		return errors.New("昵称已存在")
+	}
+
+	if querySeter.Filter("email", model.Email).Exist() {
+		return errors.New("邮箱已存在")
+	}
+
+	model.Created  = time.Now().Unix()
+	//加密密码
+	model.Salt     = utils.GetRandomString(6)
+	model.Password = model.Password + model.Salt
+	md5Ctx := md5.New()
+	md5Ctx.Write([]byte(model.Password))
+	cipherStr := md5Ctx.Sum(nil)
+	md5Psw := hex.EncodeToString(cipherStr)
+	model.Password = md5Psw
+	_, err = o.Insert(model)
+	return err
 }

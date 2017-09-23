@@ -4,7 +4,6 @@ import (
 	"strings"
 	"manage/utils/global"
 	"manage/utils/rbac"
-	"fmt"
 )
 
 //获取角色 menu 列表
@@ -14,11 +13,6 @@ func GetMenus(role uint8) (map[string]interface{}) {
 	nodes := make(map[string]interface{})
 	nodes["parent"] = parent
 	nodes["subNode"] = subNode
-
-	fmt.Println("你看", role)
-	fmt.Println("你看", parent)
-	fmt.Println("你看", subNode)
-
 	return nodes
 }
 
