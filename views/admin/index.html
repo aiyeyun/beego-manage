@@ -40,9 +40,9 @@
                                     <td>{{.Nickname}}</td>
                                     <td>{{.Email}}</td>
                                     <td>{{ index GetRoles .Role}}</td>
-                                    <td>{{date .Created "Y-m-d H:i:s"}}</td>
+                                    <td>{{.Created}}</td>
                                     <td>{{.Last_ip}}</td>
-                                    <td>{{date .Created "Y-m-d H:i:s"}}</td>
+                                    <td>{{.Update}}</td>
                                     <td class="td-actions text-right">
                                         <a href="/menu/form/{{.Id}}" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="">
                                             <i class="material-icons">edit</i>

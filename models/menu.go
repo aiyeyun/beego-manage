@@ -18,8 +18,8 @@ type Menu struct {
 	Icons   string  `form:"icons"`   //菜单图标
 	Status  int     `form:"status"`  //菜单状态
 	Sort    int     `form:"sort"`    //菜单排序
-	Created int64                    //创建时间
-	Update  int64                    //更新时间
+	Created string                   //创建时间
+	Update  string                   //更新时间
 }
 
 //菜单列表
@@ -60,7 +60,7 @@ func (model *Menu) Save() (int64, error) {
 	}
 
 	o := orm.NewOrm()
-	model.Update = time.Now().Unix()
+	model.Update = time.Now().Format("2006-01-02 15:04:05")
 	//编辑
 	if model.Id > 0 {
 		num, err := o.Update(model)
@@ -68,7 +68,7 @@ func (model *Menu) Save() (int64, error) {
 	}
 
 	//新增
-	model.Created = time.Now().Unix()
+	model.Created = time.Now().Format("2006-01-02 15:04:05")
 	id, err := o.Insert(model)
 
 	return id, err

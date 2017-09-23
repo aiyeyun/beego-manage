@@ -11,10 +11,10 @@ type MenuAuthList []*MenuAuth
 
 type MenuAuth struct {
 	BaseModel
-	Id      int  //主键ID
-	Role    uint8 //角色
-	MenuId  int  //菜单ID
-	Created int  //创建时间
+	Id      int    //主键ID
+	Role    uint8  //角色
+	MenuId  int    //菜单ID
+	Created string //创建时间
 }
 
 //表名
@@ -53,7 +53,7 @@ func (model *MenuAuth) BatchAuth(role uint8, menuIds []string) {
 		o.Insert(&MenuAuth{
 			Role: role,
 			MenuId: authMenuId,
-			Created: int(time.Now().Unix()),
+			Created: time.Now().Format("2006-01-02 15:04:05"),
 		})
 	}
 }

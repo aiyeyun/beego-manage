@@ -24,8 +24,8 @@ type Admin struct {
 	Salt     string
 	Role     uint8  `form:"role"` //0~255
 	Last_ip  string
-	Created  int64
-	Update   int64
+	Created  string
+	Update   string
 }
 
 //表名
@@ -80,7 +80,8 @@ func (model *Admin) Login() error {
 
 	//更新登录信息
 	model.Last_ip = ip
-	model.Update = time.Now().Unix()
+	model.Update = time.Now().Format("2006-01-02 15:04:05")
+	model.Update = time.Now().Format("2006-01-02 15:04:05")
 	o.Update(model, "last_ip", "update")
 	return nil
 }
@@ -100,7 +101,7 @@ func (model *Admin) Save(superAdmin uint8, user *Admin) error {
 
 	o := orm.NewOrm()
 	querySeter := o.QueryTable(model)
-	model.Update = time.Now().Unix()
+	model.Update = time.Now().Format("2006-01-02 15:04:05")
 
 	//新增
 	//检查 账号 邮箱 昵称是否存在
@@ -116,7 +117,7 @@ func (model *Admin) Save(superAdmin uint8, user *Admin) error {
 		return errors.New("邮箱已存在")
 	}
 
-	model.Created  = time.Now().Unix()
+	model.Created  = time.Now().Format("2006-01-02 15:04:05")
 	//加密密码
 	model.Salt     = utils.GetRandomString(6)
 	model.Password = model.Password + model.Salt
