@@ -16,6 +16,11 @@ func GetMenus(role uint8) (map[string]interface{}) {
 	return nodes
 }
 
+//获取当前登录者的信息
+func GetMyUserInfo()  {
+	
+}
+
 //获取超级管理员 角色
 func GetSuperAdmin() uint8 {
 	return rbac.ROLE_SUPER_ADMIN

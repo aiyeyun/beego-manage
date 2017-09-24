@@ -72,6 +72,11 @@ func (c *BaseController) RouteAuth()  {
 		return
 	}
 
+	//任何角色都有权限访问 退出登录接口 与 锁屏接口
+	if runControllerName == "/logout" || runControllerName == "/lock" {
+		return
+	}
+
 	//超管不用检查路由权限
 	if c.GetSession("user").(*models.Admin).Role == rbac.ROLE_SUPER_ADMIN {
 		return
