@@ -5,6 +5,7 @@ import (
 	"manage/models"
 	"strconv"
 	"manage/utils/file"
+	"fmt"
 )
 
 type AdminController struct {
@@ -65,7 +66,8 @@ func (c *AdminController) Form()  {
 	model := &models.Admin{}
 	if c.Ctx.Input.IsPost() {
 		c.ParseForm(model)
-		filePath, _ := file.ImagesUpload(c.Ctx.Request.FormFile("portrait"))
+		filePath, filerr := file.ImagesUpload(c.Ctx.Request.FormFile("portrait"))
+		fmt.Println("上传是纳闷回事", filePath, filerr)
 		if filePath != "" {
 			model.Portrait = filePath
 		}

@@ -117,6 +117,12 @@ func (model *Admin) Save(superAdmin uint8, user *Admin) error {
 		return errors.New("邮箱已存在")
 	}
 
+	//如果未上传头像 设置默认头像
+	defaultAvatar := "/static/assets/img/default-avatar.png"
+	if model.Portrait == "" {
+		model.Portrait = defaultAvatar
+	}
+
 	model.Created  = time.Now().Format("2006-01-02 15:04:05")
 	//加密密码
 	model.Salt     = utils.GetRandomString(6)
