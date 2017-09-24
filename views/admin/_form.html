@@ -12,7 +12,7 @@
         <!--      Wizard container        -->
         <div class="wizard-container">
             <div class="card wizard-card active" data-color="rose" id="wizardProfile">
-                <form method="POST" novalidate="novalidate">
+                <form method="POST" enctype="multipart/form-data" novalidate="novalidate">
                     {{.xsrfdata}}
                     <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                     <div class="wizard-header">
@@ -38,7 +38,7 @@
                                     <div class="picture-container">
                                         <div class="picture">
                                             <img src="/static/assets/img/default-avatar.png" class="picture-src" id="wizardPicturePreview" title="">
-                                            <input type="file" id="wizard-picture">
+                                            <input name="portrait" type="file" id="wizard-picture">
                                         </div>
                                         <h6>选择头像</h6>
                                     </div>

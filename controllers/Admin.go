@@ -4,6 +4,7 @@ import (
 	"manage/utils/rbac"
 	"manage/models"
 	"strconv"
+	"manage/utils/file"
 )
 
 type AdminController struct {
@@ -64,6 +65,10 @@ func (c *AdminController) Form()  {
 	model := &models.Admin{}
 	if c.Ctx.Input.IsPost() {
 		c.ParseForm(model)
+		filePath, _ := file.ImagesUpload(c.Ctx.Request.FormFile("portrait"))
+		if filePath != "" {
+			model.Portrait = filePath
+		}
 		err := model.Save(rbac.ROLE_SUPER_ADMIN, c.GetSession("user").(*models.Admin))
 		if err == nil {
 			c.SetSuccessFlash("管理员添加成功")
