@@ -35,6 +35,7 @@ func (c *BaseController) Prepare() {
 	c.Data["requestUrl"] = c.Ctx.Request.RequestURI
 	if !c.IsGuest() {
 		c.Data["current_role"] = c.GetSession("user").(*models.Admin).Role
+		c.Data["my_user"] = c.GetSession("user").(*models.Admin)
 	}
 }
 

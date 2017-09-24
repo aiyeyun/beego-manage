@@ -33,31 +33,29 @@
 -->
         <div class="logo">
             <a href="http://www.creative-tim.com" class="simple-text">
-                夜云
+                Night cloud
             </a>
         </div>
         <div class="logo logo-mini">
-            <a href="http://www.creative-tim.com" class="simple-text">
-                云
+            <a href="http://www.aiyeyun.com" class="simple-text">
+                Cloud
             </a>
         </div>
         <div class="sidebar-wrapper">
             <div class="user">
                 <div class="photo">
-                    <img src="/static/assets/img/faces/avatar.jpg" />
+                    <!--<img src="/static/assets/img/faces/avatar.jpg" />-->
+                    <img src="{{.my_user.Portrait}}" />
                 </div>
                 <div class="info">
                     <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                        Night cloud
+                        {{.my_user.Nickname}}
                         <b class="caret"></b>
                     </a>
                     <div class="collapse" id="collapseExample">
                         <ul class="nav">
                             <li>
                                 <a href="#">我的资料</a>
-                            </li>
-                            <li>
-                                <a href="#">编辑我的资料</a>
                             </li>
                             <li>
                                 <a href="#">设置</a>
