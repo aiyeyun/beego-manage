@@ -85,3 +85,23 @@ func (c *AdminController) Form()  {
 	c.Data["model"]     = model
 	c.Display("_form")
 }
+
+//修改密码
+func (c *AdminController) UpdatePsw()  {
+	newPsw := c.GetString("newPsw")
+	uid, _ := c.GetInt("uid")
+	model := models.Admin{Id:uid}
+	err := model.UpdatePassword(rbac.ROLE_SUPER_ADMIN, newPsw, c.GetSession("user").(*models.Admin))
+
+	data := make(map[string]interface{})
+	c.Data["json"] = data
+	if err != nil {
+		data["status"] = false
+		data["msg"] = err.Error()
+		c.ServeJSON()
+	}
+
+	data["status"] = true
+	data["msg"] = "修改成功"
+	c.ServeJSON()
+}

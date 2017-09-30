@@ -8,6 +8,8 @@ import (
 	"manage/models"
 	"manage/utils/global"
 	"manage/utils/rbac"
+	"encoding/json"
+	"fmt"
 )
 
 // BaseController 基 controller
@@ -170,4 +172,12 @@ func (c *BaseController) GetParamUint8(key string) (uint8, error) {
 	val := c.Ctx.Input.Param(":"+key)
 	int64, err := strconv.ParseUint(val, 10, 8)
 	return uint8(int64), err
+}
+
+//Json 输出
+func (c *BaseController) ResponseJson(obj map[string]interface{})  {
+	fmt.Println("要输出的是", obj)
+	b, _ := json.Marshal(obj)
+	fmt.Println("转json后", string(b))
+	c.Ctx.WriteString(string(b))
 }

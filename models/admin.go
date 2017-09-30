@@ -9,6 +9,7 @@ import (
 	"github.com/astaxie/beego/validation"
 	"manage/utils"
 	"manage/utils/page"
+	"github.com/astaxie/beego"
 )
 
 type AdminList []*Admin
@@ -149,4 +150,29 @@ func (model *Admin) Admins(p int, limit int) (AdminList, *page.PageLinks) {
 
 	querySeter.OrderBy("created").Limit(limit).Offset(page.GetOffset()).All(&adminList)
 	return adminList, page
+}
+
+//修改管理员密码
+func (model *Admin) UpdatePassword(superRole uint8, newPsw string, user *Admin) error {
+	o := orm.NewOrm()
+	superSuperAdmin , _ := beego.AppConfig.Int("SuperSuperAdmin")
+	//只要超级超级管理员才有权限修改所有人的密码
+	if superSuperAdmin != user.Id && model.Id != user.Id {
+		o.Read(model)
+		if model.Role == superRole {
+			return errors.New("不能设置其他超级管理员")
+		}
+	}
+
+	//修改密码
+	//加密密码
+	model.Salt     = utils.GetRandomString(6)
+	model.Password = newPsw + model.Salt
+	md5Ctx := md5.New()
+	md5Ctx.Write([]byte(model.Password))
+	cipherStr := md5Ctx.Sum(nil)
+	md5Psw := hex.EncodeToString(cipherStr)
+	model.Password = md5Psw
+	o.Update(model, "salt", "password")
+	return nil
 }

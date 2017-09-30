@@ -7,6 +7,7 @@
 
 {{template "layout/head.html" . }}
 
+<input type="hidden" id="xsrf" value="{{.xsrf_token}}">
 <div class="container-fluid dataTables_wrapper">
     <div class="row">
         <div class="col-md-12">
@@ -44,10 +45,10 @@
                                     <td>{{.Last_ip}}</td>
                                     <td>{{.Update}}</td>
                                     <td class="td-actions text-right">
-                                        <a href="/menu/form/{{.Id}}" type="button" rel="tooltip" class="btn btn-success" data-original-title="" title="">
+                                        <a href="javascript:void(0)" data-id="{{.Id}}" type="button" rel="tooltip" class="btn btn-success up_psw" data-original-title="" title="修改密码">
                                             <i class="material-icons">edit</i>
                                         </a>
-                                        <a href="/menu/del/{{.Id}}" type="button" rel="tooltip" class="btn btn-danger del-btn" data-original-title="" title="">
+                                        <a href="javascript:void(0)" type="button" rel="tooltip" class="btn btn-danger del-btn" data-original-title="" title="删除用户">
                                             <i class="material-icons">close</i>
                                         </a>
                                     </td>
@@ -72,7 +73,37 @@
 {{define "js"}}
 <script>
     $(document).ready(function() {
+        $(".up_psw").click(function () {
+            var _this = $(this)
+            swal({
+                title: '请输入新的密码',
+                html: '<div class="form-group">' +
+                '<input id="new-psw" type="password" class="form-control" />' +
+                '</div>',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function(result) {
+                $(".btn").blur();
+                var new_psw = $("#new-psw").val()
+                var uid = _this.data('id')
+                if(!new_psw){
+                    return
+                }
+                // ajax 修改密码
+                $.post('/admin/new-psw', {'_xsrf' : $("#xsrf").val(), 'uid' : uid , 'newPsw':new_psw}, function (data) {
+                    if(data.status){
+                        main.notifyShow(data.msg, "success")
+                        return
+                    }
+                    main.notifyShow(data.msg, "danger")
+                }, 'json')
+            }).catch(function () {
+                $(".btn").blur();
+            })
 
+        })
     });
 </script>
 {{end}}
