@@ -5,7 +5,6 @@ import (
 	"manage/models"
 	"strconv"
 	"manage/utils/file"
-	"fmt"
 )
 
 type AdminController struct {
@@ -66,8 +65,7 @@ func (c *AdminController) Form()  {
 	model := &models.Admin{}
 	if c.Ctx.Input.IsPost() {
 		c.ParseForm(model)
-		filePath, filerr := file.ImagesUpload(c.Ctx.Request.FormFile("portrait"))
-		fmt.Println("上传是纳闷回事", filePath, filerr)
+		filePath, _ := file.ImagesUpload(c.Ctx.Request.FormFile("portrait"))
 		if filePath != "" {
 			model.Portrait = filePath
 		}
@@ -104,4 +102,19 @@ func (c *AdminController) UpdatePsw()  {
 	data["status"] = true
 	data["msg"] = "修改成功"
 	c.ServeJSON()
+}
+
+//删除管理员
+func (c *AdminController) DeleteUser()  {
+	uid, _ := c.GetParamInt("uid")
+	model := models.Admin{Id:uid}
+	err := model.DeleteUser(rbac.ROLE_SUPER_ADMIN, c.GetSession("user").(*models.Admin))
+	if err != nil {
+		c.SetErrorFlash(err.Error())
+		c.Redirect("/admin/index", 302)
+		return
+	}
+
+	c.SetSuccessFlash("删除成功")
+	c.Redirect("/admin/index", 302)
 }

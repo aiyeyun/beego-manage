@@ -47,6 +47,8 @@ func init() {
 	beego.Router("/admin/auth/?:role([0-9]+)", &controllers.AdminController{}, "get:Auth;post:BatchAuth")
 	//修改密码
 	beego.Router("/admin/new-psw", &controllers.AdminController{}, "post:UpdatePsw")
+	//删除用户
+	beego.Router("/admin/del-user/?:uid([0-9]+)", &controllers.AdminController{}, "*:DeleteUser")
 
 	//Errors 错误渲染
 	beego.ErrorController(&controllers.ErrrosController{})

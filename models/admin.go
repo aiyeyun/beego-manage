@@ -176,3 +176,19 @@ func (model *Admin) UpdatePassword(superRole uint8, newPsw string, user *Admin) 
 	o.Update(model, "salt", "password")
 	return nil
 }
+
+//删除用户
+func (model *Admin) DeleteUser(superRole uint8, user *Admin) error {
+	superSuperAdmin , _ := beego.AppConfig.Int("SuperSuperAdmin")
+	if user.Role != superRole && user.Id != superSuperAdmin {
+		return errors.New("您没有权限删除用户")
+	}
+
+	if model.Id == user.Id {
+		return errors.New("不能删除自己")
+	}
+
+	o := orm.NewOrm()
+	o.Delete(model)
+	return  nil
+}

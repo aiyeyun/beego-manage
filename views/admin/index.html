@@ -48,7 +48,7 @@
                                         <a href="javascript:void(0)" data-id="{{.Id}}" type="button" rel="tooltip" class="btn btn-success up_psw" data-original-title="" title="修改密码">
                                             <i class="material-icons">edit</i>
                                         </a>
-                                        <a href="javascript:void(0)" type="button" rel="tooltip" class="btn btn-danger del-btn" data-original-title="" title="删除用户">
+                                        <a href="javascript:void(0)" data-url="/admin/del-user/{{.Id}}" type="button" rel="tooltip" class="btn btn-danger del-btn" data-original-title="" title="删除用户">
                                             <i class="material-icons">close</i>
                                         </a>
                                     </td>
@@ -102,8 +102,32 @@
             }).catch(function () {
                 $(".btn").blur();
             })
-
         })
+
+
+        $(".del-btn").click(function () {
+            var href = $(this).data('url')
+            swal({
+                title: '确定要删除吗?',
+                html: '',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then(function(result) {
+                self.location = href;
+                return true;
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                    return false;
+                }
+            })
+
+            return false;
+        })
+
     });
 </script>
 {{end}}
